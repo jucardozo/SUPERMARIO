@@ -77,7 +77,7 @@ void print_map_allegro(int arr [ALTURA][LARGO]);        //imprime mapa allegro
 
 
 /*Globales*/
-int nivel=1;
+int nivel=3;
 int stop;           //variable que uso para pausar el juego
 int puntaje=0;      /*se lleva el conteo del puntaje*/
 int vida=3;         /*se lleva el conteo de las vidas*/
@@ -94,7 +94,7 @@ int lvl_3 [ALTURA][LARGO];
 /**********************************/
 /*MUTEX Y THREAD*/
 pthread_t th1,th2,th3,th4,th5;                  /*se crean thread para funciones necesarias*/
-pthread_mutex_t lock1,lock2,lock3;        /*creo un candado para dos funciones que controlan el movimiento*/
+pthread_mutex_t lock1,lock2;        /*creo un candado para dos funciones que controlan el movimiento*/
 
 
 
@@ -361,7 +361,7 @@ int main() {
                     pos[2]=0;
                     al_draw_scaled_bitmap(mar,0, 0, al_get_bitmap_width(mar), al_get_bitmap_height(mar),0, 0, LARGO_DISPLAY, ANCHO_DISPLAY,0);      //CARGO BACKGROUND Y LO MUESTRO
                     al_flip_display();                    
-                    printmat(*niveles[0]);  //imprime el nivel
+                    //printmat(*niveles[0]);  //imprime el nivel
                     print_map_allegro(*niveles[0]);
                     
                     i=0;fin=1; break;
@@ -373,7 +373,7 @@ int main() {
                     pos[2]=0;
                     al_draw_scaled_bitmap(mar,0, 0, al_get_bitmap_width(mar), al_get_bitmap_height(mar),0, 0, LARGO_DISPLAY, ANCHO_DISPLAY,0);      //CARGO BACKGROUND Y LO MUESTRO
                     al_flip_display();
-                    printmat(*niveles[1]);  //
+                    //printmat(*niveles[1]);  //
                     print_map_allegro(*niveles[1]);
                     i=1;fin=1;boton=0;break;
             case 3 :
@@ -384,9 +384,11 @@ int main() {
                     pos[2]=0;
                     al_draw_scaled_bitmap(mar,0, 0, al_get_bitmap_width(mar), al_get_bitmap_height(mar),0, 0, LARGO_DISPLAY, ANCHO_DISPLAY,0);      //CARGO BACKGROUND Y LO MUESTRO
                     al_flip_display();
-                    printmat(*niveles[2]);  //
+                    //printmat(*niveles[2]);  //
                     print_map_allegro(*niveles[2]);
                     boton=0;i=2;fin=1;break;
+            default:
+                fin=0;vida=0;break;
         }
         
         while(fin){
@@ -398,16 +400,20 @@ int main() {
                     stop=1;
                     tecla=0;
                     menu();
-                    if(tecla==salir){
+                    if(tecla==salir){          //salida provocada por el menu
                         fin=0;
                         vida=0;
                     }
+                }
+                else if (boton==salir){         //salida provocada por display
+                        fin=0;
+                        vida=0;
                 }
                 int val=reglas(*niveles[i],boton); /*val, guarda la evaluacion de reglas*/
                 if(val==0){                  /*si el movimiento esta permitido , lo mueve efectivamente*/
                     
                     movimiento(*niveles[i],boton); /*realza el movimiento efectivo, solo de Mario*/
-                    printmat(*niveles[i]);
+                    //printmat(*niveles[i]);
                     print_map_allegro(*niveles[i]);
                     tecla=0;
                 }
@@ -415,7 +421,7 @@ int main() {
                     puntaje+=10;
                     printf("PUNTAJE:%d\n",puntaje);
                     movimiento(*niveles[i],boton);
-                    printmat(*niveles[i]);
+                    //printmat(*niveles[i]);
                     print_map_allegro(*niveles[i]);
                     tecla=0;
                 }
@@ -450,9 +456,10 @@ int main() {
             }
           
         }
-      
+        
     }
-
+    printf("cerrando allegro\n");
+    stop=pausa;
     /*DESTROY ALLEGRO*/
     destroy_allegro();
     return 0;
@@ -641,14 +648,14 @@ void*  caida ( ){
         val=reglas(*niveles[nivel-1],boton_aux);
         if(val==0){                  /*si el movimiento esta permitido , lo mueve efectivamente*/
             movimiento(*niveles[nivel-1],boton_aux); /*realza el movimiento efectivo, solo de Mario*/
-            printmat(*niveles[nivel-1]);
+            //printmat(*niveles[nivel-1]);
             //print_map_allegro(*niveles[nivel-1]);
         }
         else if(val==2){             /*recogio una moneda*/          
             puntaje+=10;
             printf("PUNTAJE:%d\n",puntaje);
             movimiento(*niveles[nivel-1],boton_aux);
-            printmat(*niveles[nivel-1]);
+            //printmat(*niveles[nivel-1]);
             //print_map_allegro(*niveles[nivel-1]);
         }
         else if(val==4){     
@@ -680,12 +687,6 @@ void *entrad_allegro(){
         
         ALLEGRO_EVENT ev;
         if (al_get_next_event(event_queue, &ev)){ //Toma un evento de la cola.
-            /*if (ev.type == ALLEGRO_EVENT_TIMER) {   //si el timer realiza un evento , me regenera el display
-                
-                
-                al_clear_to_color(al_map_rgb(50, 255, 10)); //Hace clear del backbuffer del diplay al color RGB 255,255,255 (blanco)
-                al_flip_display(); //Flip del backbuffer, pasa a verse a la pantalla
-            }*/
             if (ev.type == ALLEGRO_EVENT_KEY_DOWN) {       //pregunta si hay alguna tecla presionada,
                     switch (ev.keyboard.keycode) {         //en el caso de que lo haya marca como true, la presionada
                         case ALLEGRO_KEY_W:
@@ -745,6 +746,11 @@ void *entrad_allegro(){
                             break;
                     }
                 }
+                else if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE){            //Si se quiso cerrar el display                                                                     //
+                    tecla=salir;
+                    
+                }
+
             }
     }
 }
