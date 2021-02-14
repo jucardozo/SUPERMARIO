@@ -18,12 +18,12 @@ void creacionmap(int que_nivel){        //creacion de los mapas, niveles: 1,2 y 
             lvl_1[7][0]=MARIO;
             //ENEMIGOS
             lvl_1[4][24]=PEZ;
-            lvl_1[9][28]=PEZ;
-            lvl_1[7][39]=PEZ;
+            lvl_1[9][26]=PEZ;
+            lvl_1[8][37]=PEZ;
 
-            lvl_1[5][14]=PES;
+            lvl_1[5][12]=PES;
             lvl_1[11][22]=PES;
-            lvl_1[6][48]=PES;
+            lvl_1[6][44]=PES;
 
             lvl_1[10][6]=PULPO;
             lvl_1[12][28]=PULPO;
@@ -206,9 +206,9 @@ void creacionmap(int que_nivel){        //creacion de los mapas, niveles: 1,2 y 
             //ENEMIGOS
             lvl_2[8][5]=PEZ;
             lvl_2[8][18]=PEZ;
-            lvl_2[6][24]=PEZ;
-            lvl_2[10][34]=PEZ;
-            lvl_2[10][43]=PEZ;
+            lvl_2[3][24]=PEZ;
+            lvl_2[10][35]=PEZ;
+            lvl_2[13][43]=PEZ;
             lvl_2[12][58]=PEZ;
 
             lvl_2[12][9]=PES;
@@ -218,9 +218,9 @@ void creacionmap(int que_nivel){        //creacion de los mapas, niveles: 1,2 y 
             lvl_2[4][46]=PES;
             lvl_2[9][61]=PES;
 
-            lvl_2[7][13]=PULPO;
+            lvl_2[8][13]=PULPO;
             lvl_2[11][22]=PULPO;
-            lvl_2[7][31]=PULPO;
+            lvl_2[8][31]=PULPO;
             lvl_2[8][38]=PULPO;
             lvl_2[9][53]=PULPO;
             lvl_2[9][63]=PULPO;
@@ -491,7 +491,7 @@ void creacionmap(int que_nivel){        //creacion de los mapas, niveles: 1,2 y 
             lvl_3[13][21]=PULPO;
             lvl_3[7][26]=PULPO;
             lvl_3[8][34]=PULPO;
-            lvl_3[1][36]=PULPO;
+            lvl_3[11][36]=PULPO;
             lvl_3[13][41]=PULPO;
             lvl_3[10][42]=PULPO;
             lvl_3[11][53]=PULPO;
