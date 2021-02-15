@@ -53,4 +53,3 @@ void creacionmap(int);
 
 #endif /* LEVELS_H */
 
-

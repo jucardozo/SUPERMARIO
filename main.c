@@ -34,8 +34,8 @@
 
 /*DEFINES PARA EL HARDWARE*/
 //buscan ser usadas como instrucciones para el precompilador
-//#define RASPI
-#define PC      //si estamos usando la libreria de allegro
+#define RASPI
+//#define PC      //si estamos usando la libreria de allegro
 
 /* prototipos*/
 void bienvenida (void);
@@ -110,7 +110,7 @@ int main() {
                     pos[1]=0;
                     pos[2]=0;
 #ifdef PC
-                    al_draw_scaled_bitmap(mar,0, 0, al_get_bitmap_width(mar), al_get_bitmap_height(mar),0, 0, LARGO_DISPLAY, ANCHO_DISPLAY,0);      //CARGO BACKGROUND Y LO MUESTRO
+                    draw_background ();
                     al_flip_display();                                        
                     print_map_allegro(*niveles[0]);
 #endif   
@@ -125,7 +125,7 @@ int main() {
                     pos[1]=0;
                     pos[2]=0;
 #ifdef PC
-                    al_draw_scaled_bitmap(mar,0, 0, al_get_bitmap_width(mar), al_get_bitmap_height(mar),0, 0, LARGO_DISPLAY, ANCHO_DISPLAY,0);      //CARGO BACKGROUND Y LO MUESTRO
+                    draw_background ();
                     al_flip_display();              
                     print_map_allegro(*niveles[1]);
 #endif
@@ -141,7 +141,7 @@ int main() {
                     pos[1]=0;
                     pos[2]=0;
 #ifdef PC
-                    al_draw_scaled_bitmap(mar,0, 0, al_get_bitmap_width(mar), al_get_bitmap_height(mar),0, 0, LARGO_DISPLAY, ANCHO_DISPLAY,0);      //CARGO BACKGROUND Y LO MUESTRO
+                    draw_background ();
                     al_flip_display();                   
                     print_map_allegro(*niveles[2]);
 #endif
@@ -887,4 +887,3 @@ void * enemigo_pulpo(){             ////este thread controla los movimientos del
 void bienvenida (void){
     printf("Bienvenido a la beta del super mario\n");
 }
-

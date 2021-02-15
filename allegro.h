@@ -22,6 +22,8 @@ extern "C" {
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_audio.h> // NO OLVIDAR AGREGAR EN EL LINKER DEL PROYECTO
 #include <allegro5/allegro_acodec.h> // NO OLVIDAR AGREGAR EN EL LINKER DEL PROYECTO*
+#include <allegro5/allegro_font.h> //manejo de fonts
+#include <allegro5/allegro_ttf.h> //Manejo de ttfs
 #include "levels.h"         //solo para incluir defines
     
 #define up 100
@@ -37,11 +39,23 @@ extern "C" {
 #define LARGO_DISPLAY 640      //TAMANIO DE IMAGEN
 #define ANCHO_DISPLAY 544      //TAMANIO DE IMAGEN
     
-void destroy_allegro (void);
+#define PUNTAJE_X 100.0
+#define PUNTAJE_NUMERO_X 200.0
+#define NIVEL_X 300.0
+#define NIVEL_NUMERO_X 350.0
+#define VIDA_X 450.0
+#define VISTA_Y 10.0
+    
+    
+int bienvenida_allegro(void);
+int inicializacion();
+void draw_background (void);
 void * entrad_allegro();    /*recibe por comando el movimiento deseado por el jugador*/
 void print_map_allegro(int arr [ALTURA][LARGO]);
-int inicializacion();
+void destroy_allegro (void);
 
+
+ALLEGRO_FONT * font;
 ALLEGRO_BITMAP *mar;                         //que nos permitiran utilizar ciertas funciones de
 ALLEGRO_BITMAP *agua;                           //allegro.
 ALLEGRO_BITMAP *alga; 
@@ -62,4 +76,3 @@ ALLEGRO_BITMAP *pulpo;
 #endif
 
 #endif /* ALLEGRO_H */
-

@@ -68,7 +68,7 @@ int inicializacion(){
         al_destroy_display(display);
         return -1;
     }
-    else if (!(mar = al_load_bitmap("mar.jpg"))) {              // se carga en un bitmap la imagen que usaremos de base
+    else if (!(mar = al_load_bitmap("mar.png"))) {              // se carga en un bitmap la imagen que usaremos de base
         fprintf(stderr, "Unable to load mar\n");
         al_uninstall_system();
         al_shutdown_image_addon();
@@ -145,6 +145,18 @@ int inicializacion(){
         al_destroy_display(display);
         return -1;
     }
+    
+    /*INICIALIZACION FUENTE*/
+    al_init_font_addon(); // initialize the font addon
+    al_init_ttf_addon(); // initialize the ttf (True Type Font) addon
+    
+    font = al_load_ttf_font("letritas.ttf", 36, 0); //HAY CREAR UN FONT PARA CADA TAMAÑO DE LETRA 
+    
+    if (!font) {
+        fprintf(stderr, "Could not load 'letritas.ttf'.\n");
+        return -1;
+    }
+    
     /*INICIALIZACION TIMER*/
     timer = al_create_timer(1.0 / FPS); //crea el timer pero NO empieza a correr
     if (!timer) {
@@ -209,55 +221,17 @@ int inicializacion(){
     
     
     
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////*BIENVENIDA POR DISPLAY Y PANTALLA*////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
-    /*PANTALLA NINTENDO + MUSICA*/
-    //bienvenida();       //bienvenida por display
-    al_clear_to_color(al_map_rgb(255, 255, 255));
-    al_flip_display();
-    al_rest(1.0);
-    al_play_sample(music, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, NULL);              //Damos bienvenida al usuario 
-    al_draw_scaled_bitmap(nintendo,0, 0, al_get_bitmap_width(nintendo), al_get_bitmap_height(nintendo),0, 0, LARGO_DISPLAY, ANCHO_DISPLAY,0);      //imprimo nintendo                                //
-    al_flip_display();                                                      //Muestro la imagen de bienvenida
-    al_rest(4.0);
-    al_clear_to_color(al_map_rgb(255, 255, 255));
-    al_flip_display();
-    al_rest(1.0);
-    al_draw_scaled_bitmap(lobby,0, 0, al_get_bitmap_width(lobby), al_get_bitmap_height(lobby),0, 0, LARGO_DISPLAY, ANCHO_DISPLAY,0);      //imprimo lobby
-    al_flip_display();
-    
-    /*PANTALLA DE LOBBY + PRESS_START*/
-    int mientras = 1;
-    while (mientras){                                             //Me quedo aca hasta que se apriete enter o se cierre el programa                             //
-        ALLEGRO_EVENT ev0;                                                 //Struct toma todos los eventos de la cola                                                    //
-        if (al_get_next_event(event_queue, &ev0)){                   //Damos entrada de teclado por allegro                                                              //
-            if (ev0.type == ALLEGRO_EVENT_DISPLAY_CLOSE){            //Si se quiso cerrar el display                                                                     //
-                destroy_allegro();                                                                                                                                //
-                return 0;                                                                                                                                                //
-            }                                                                                                                                                            //
-            else if ((ev0.type == ALLEGRO_EVENT_KEY_DOWN) && (ev0.keyboard.keycode == ALLEGRO_KEY_ENTER)|| (ev0.keyboard.keycode == ALLEGRO_KEY_SPACE)){              //sino tranqui, salgo del while sin problema     //
-                mientras = 0;   
-            }
-        }    
-        al_draw_bitmap(press_start,100,340,0);          //IMPRIMO PRESS START
-        al_flip_display();
-        al_rest(1.0);
-        al_draw_scaled_bitmap(lobby,0, 0, al_get_bitmap_width(lobby), al_get_bitmap_height(lobby),0, 0, LARGO_DISPLAY, ANCHO_DISPLAY,0);        //HAGO TITILARLO
-        al_flip_display();
-        al_rest(1.0);
-    }                               //HASTA QUE SE APRETE ENTER O ESPACIO
-   
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
-    
-    
+    /*BIENVENIDA*/
+    int hola_allegro = bienvenida_allegro();   //bienvenida por allegro
+    if(hola_allegro == -1){
+        return -1;
+    }
+ 
+}
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////*SE ARRANCA A JUGAR*/////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////////////////////////        
-}
+
 
 
 void *entrad_allegro(){
@@ -336,26 +310,46 @@ void *entrad_allegro(){
             }
     }
 }
-void destroy_allegro (void){
-    al_destroy_display(display);                //se libera la memoria dinamica , destruyendo los elemntos usados
-    al_destroy_bitmap(nintendo);
-    al_destroy_bitmap(lobby);
-    al_destroy_bitmap(press_start);
-    al_destroy_bitmap(mar);
-    al_destroy_bitmap(agua);
-    al_destroy_bitmap(alga);
-    al_destroy_bitmap(bloque);
-    al_destroy_bitmap(mario_adelante);
-    al_destroy_bitmap(mario_atras);
-    al_destroy_bitmap(moneda);
-    al_destroy_bitmap(final);
-    al_destroy_bitmap(pez);
-    al_destroy_bitmap(pes);
-    al_destroy_bitmap(pulpo);
-    al_uninstall_audio();                                                                                                                                    //
-    al_destroy_sample(music);
-    al_destroy_timer(timer);
-    al_destroy_event_queue(event_queue); 
+
+//////////////////////////////////////////////////////////////////////////
+int bienvenida_allegro(void){
+    
+    /*PANTALLA NINTENDO*/
+    al_clear_to_color(al_map_rgb(255, 255, 255));
+    al_flip_display();
+    al_rest(1.0);
+    al_play_sample(music, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, NULL);              //Damos bienvenida al usuario 
+    al_draw_scaled_bitmap(nintendo,0, 0, al_get_bitmap_width(nintendo), al_get_bitmap_height(nintendo),0, 0, LARGO_DISPLAY, ANCHO_DISPLAY,0);      //imprimo nintendo                                //
+    al_flip_display();                                                      //Muestro la imagen de bienvenida
+    al_rest(4.0);
+    al_clear_to_color(al_map_rgb(255, 255, 255));
+    al_flip_display();
+    al_rest(1.0);
+    al_draw_scaled_bitmap(lobby,0, 0, al_get_bitmap_width(lobby), al_get_bitmap_height(lobby),0, 0, LARGO_DISPLAY, ANCHO_DISPLAY,0);      //imprimo lobby
+    al_flip_display();
+    
+    /*PANTALLA DE LOBBY + PRESS_START*/
+    int mientras = 1;
+    while (mientras){                                             //Me quedo aca hasta que se apriete enter o se cierre el programa                             //
+        ALLEGRO_EVENT ev0;                                                 //Struct toma todos los eventos de la cola                                                    //
+        if (al_get_next_event(event_queue, &ev0)){                   //Damos entrada de teclado por allegro                                                              //
+            if (ev0.type == ALLEGRO_EVENT_DISPLAY_CLOSE){            //Si se quiso cerrar el display                                                                     //
+                destroy_allegro();                                                                                                                                //
+                return -1;                                                                                                                                                //
+            }                                                                                                                                                            //
+            else if ((ev0.type == ALLEGRO_EVENT_KEY_DOWN) && (ev0.keyboard.keycode == ALLEGRO_KEY_ENTER)|| (ev0.keyboard.keycode == ALLEGRO_KEY_SPACE)){              //sino tranqui, salgo del while sin problema     //
+                mientras = 0;   
+            }
+        }    
+        al_draw_bitmap(press_start,100,340,0);          //IMPRIMO PRESS START
+        al_flip_display();
+        al_rest(1.0);
+        al_draw_scaled_bitmap(lobby,0, 0, al_get_bitmap_width(lobby), al_get_bitmap_height(lobby),0, 0, LARGO_DISPLAY, ANCHO_DISPLAY,0);        //HAGO TITILARLO
+        al_flip_display();
+        al_rest(1.0);
+    }                               //HASTA QUE SE APRETE ENTER O ESPACIO
+    return 0;
+   
 }
 
 
@@ -458,3 +452,36 @@ void print_map_allegro(int arr [ALTURA][LARGO]){
     }
   
  }
+
+void draw_background (void){
+    al_draw_scaled_bitmap(mar,0, 0, al_get_bitmap_width(mar), al_get_bitmap_height(mar),0, 0, LARGO_DISPLAY, ANCHO_DISPLAY,0);      //CARGO BACKGROUND Y LO MUESTRO
+    al_draw_text(font, al_map_rgb(255, 255, 255), PUNTAJE_X , VISTA_Y , ALLEGRO_ALIGN_CENTER, "PUNTAJE:");
+    al_draw_text(font, al_map_rgb(255, 255, 255), PUNTAJE_NUMERO_X , VISTA_Y , ALLEGRO_ALIGN_CENTER, "0000");
+    al_draw_text(font, al_map_rgb(255, 255, 255), NIVEL_X , VISTA_Y , ALLEGRO_ALIGN_CENTER, "NIVEL:");
+    al_draw_text(font, al_map_rgb(255, 255, 255), NIVEL_NUMERO_X , VISTA_Y , ALLEGRO_ALIGN_CENTER, "1");
+    al_draw_text(font, al_map_rgb(255, 255, 255), VIDA_X , VISTA_Y , ALLEGRO_ALIGN_CENTER, "VIDA:");
+    al_flip_display();
+}
+
+
+void destroy_allegro (void){
+    al_destroy_display(display);                //se libera la memoria dinamica , destruyendo los elemntos usados
+    al_destroy_bitmap(nintendo);
+    al_destroy_bitmap(lobby);
+    al_destroy_bitmap(press_start);
+    al_destroy_bitmap(mar);
+    al_destroy_bitmap(agua);
+    al_destroy_bitmap(alga);
+    al_destroy_bitmap(bloque);
+    al_destroy_bitmap(mario_adelante);
+    al_destroy_bitmap(mario_atras);
+    al_destroy_bitmap(moneda);
+    al_destroy_bitmap(final);
+    al_destroy_bitmap(pez);
+    al_destroy_bitmap(pes);
+    al_destroy_bitmap(pulpo);
+    al_uninstall_audio();                                                                                                                                    //
+    al_destroy_sample(music);
+    al_destroy_timer(timer);
+    al_destroy_event_queue(event_queue); 
+}

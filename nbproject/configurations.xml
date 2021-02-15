@@ -14,8 +14,9 @@
       <itemPath>alga.png</itemPath>
       <itemPath>bloque.png</itemPath>
       <itemPath>final.png</itemPath>
+      <itemPath>../../Descargas/letritas.ttf</itemPath>
       <itemPath>lobby.jpg</itemPath>
-      <itemPath>mar.jpg</itemPath>
+      <itemPath>../../Descargas/mar.png</itemPath>
       <itemPath>mario_adelante.png</itemPath>
       <itemPath>mario_atras.png</itemPath>
       <itemPath>moneda.png</itemPath>
@@ -74,6 +75,10 @@
           </linkerLibItems>
         </linkerTool>
       </compileType>
+      <item path="../../Descargas/letritas.ttf" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../Descargas/mar.png" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="agua.png" ex="false" tool="3" flavor2="0">
       </item>
       <item path="alga.png" ex="false" tool="3" flavor2="0">
@@ -93,8 +98,6 @@
       <item path="lobby.jpg" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.c" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="mar.jpg" ex="false" tool="3" flavor2="0">
       </item>
       <item path="mario_adelante.png" ex="false" tool="3" flavor2="0">
       </item>
@@ -135,6 +138,10 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="../../Descargas/letritas.ttf" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../Descargas/mar.png" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="agua.png" ex="false" tool="3" flavor2="0">
       </item>
       <item path="alga.png" ex="false" tool="3" flavor2="0">
@@ -154,8 +161,6 @@
       <item path="lobby.jpg" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.c" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="mar.jpg" ex="false" tool="3" flavor2="0">
       </item>
       <item path="mario_adelante.png" ex="false" tool="3" flavor2="0">
       </item>
