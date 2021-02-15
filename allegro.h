@@ -49,7 +49,7 @@ extern "C" {
     
 int bienvenida_allegro(void);
 int inicializacion();
-void draw_background (void);
+void draw_background (int puntaje);
 void * entrad_allegro();    /*recibe por comando el movimiento deseado por el jugador*/
 void print_map_allegro(int arr [ALTURA][LARGO]);
 void destroy_allegro (void);

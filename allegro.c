@@ -453,10 +453,10 @@ void print_map_allegro(int arr [ALTURA][LARGO]){
   
  }
 
-void draw_background (void){
+void draw_background (int puntaje){
     al_draw_scaled_bitmap(mar,0, 0, al_get_bitmap_width(mar), al_get_bitmap_height(mar),0, 0, LARGO_DISPLAY, ANCHO_DISPLAY,0);      //CARGO BACKGROUND Y LO MUESTRO
     al_draw_text(font, al_map_rgb(255, 255, 255), PUNTAJE_X , VISTA_Y , ALLEGRO_ALIGN_CENTER, "PUNTAJE:");
-    al_draw_text(font, al_map_rgb(255, 255, 255), PUNTAJE_NUMERO_X , VISTA_Y , ALLEGRO_ALIGN_CENTER, "0000");
+    al_draw_textf(font, al_map_rgb(255, 255, 255), PUNTAJE_NUMERO_X , VISTA_Y , ALLEGRO_ALIGN_CENTER, "%d",puntaje);
     al_draw_text(font, al_map_rgb(255, 255, 255), NIVEL_X , VISTA_Y , ALLEGRO_ALIGN_CENTER, "NIVEL:");
     al_draw_text(font, al_map_rgb(255, 255, 255), NIVEL_NUMERO_X , VISTA_Y , ALLEGRO_ALIGN_CENTER, "1");
     al_draw_text(font, al_map_rgb(255, 255, 255), VIDA_X , VISTA_Y , ALLEGRO_ALIGN_CENTER, "VIDA:");

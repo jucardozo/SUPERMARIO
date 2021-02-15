@@ -34,8 +34,8 @@
 
 /*DEFINES PARA EL HARDWARE*/
 //buscan ser usadas como instrucciones para el precompilador
-#define RASPI
-//#define PC      //si estamos usando la libreria de allegro
+//#define RASPI
+#define PC      //si estamos usando la libreria de allegro
 
 /* prototipos*/
 void bienvenida (void);
@@ -110,7 +110,7 @@ int main() {
                     pos[1]=0;
                     pos[2]=0;
 #ifdef PC
-                    draw_background ();
+                    draw_background (puntaje);
                     al_flip_display();                                        
                     print_map_allegro(*niveles[0]);
 #endif   
@@ -125,7 +125,7 @@ int main() {
                     pos[1]=0;
                     pos[2]=0;
 #ifdef PC
-                    draw_background ();
+                    draw_background (puntaje);
                     al_flip_display();              
                     print_map_allegro(*niveles[1]);
 #endif
@@ -141,7 +141,7 @@ int main() {
                     pos[1]=0;
                     pos[2]=0;
 #ifdef PC
-                    draw_background ();
+                    draw_background (puntaje);
                     al_flip_display();                   
                     print_map_allegro(*niveles[2]);
 #endif
@@ -189,6 +189,9 @@ int main() {
                     movimiento(*niveles[i],boton);                    
 #ifdef PC
                     print_map_allegro(*niveles[i]);
+                    draw_background (puntaje);
+                    al_flip_display();
+                    
 #endif
 #ifdef RASPI
                  printmat(*niveles[i]);   
@@ -203,6 +206,10 @@ int main() {
                     tecla=0;
                     nivel+=1;
                     fin=0;
+#ifdef PC
+                     draw_background (puntaje);
+                     al_flip_display(); 
+#endif
                 }
                 else if(val==3){
                
