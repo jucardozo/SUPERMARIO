@@ -23,7 +23,7 @@
 #include <allegro5/allegro_audio.h> // NO OLVIDAR AGREGAR EN EL LINKER DEL PROYECTO
 #include <allegro5/allegro_acodec.h> // NO OLVIDAR AGREGAR EN EL LINKER DEL PROYECTO*/
 
-/*define*/
+/*DEFINE PARA EL USO DEL JUEGO*/
 
 #define up 100
 #define right 101
@@ -32,6 +32,10 @@
 #define pausa 104
 #define salir 105
 
+/*DEFINES PARA EL HARDWARE*/
+//buscan ser usadas como instrucciones para el precompilador
+//#define RASPI
+#define PC      //si estamos usando la libreria de allegro
 
 /* prototipos*/
 void bienvenida (void);
@@ -41,13 +45,11 @@ void movimiento(int arr[ALTURA][LARGO],int boton);  /*realiza el movimiento efec
 void ctrl_posicion(int arr[ALTURA][LARGO],int pos[3]);  /*Funcion que busca la posicion de mario en el mapa (Matriz), se le pasa el nivel y la cantidad de movimiento del mapa*/
 int reglas (int arr[ALTURA][LARGO],int boton);      /*evalua la validez del movimietno del mario*/
 void * caida ();    /*caida de mario , impuesta por la gravedad */
-
+void *entrad();
 void * enemigo_pez();
 void * enemigo_pes();
 void * enemigo_pulpo();
 int menu();
-
-void print_map_allegro(int arr [ALTURA][LARGO]);        //imprime mapa allegro
 
 
 /*Globales*/
@@ -76,18 +78,24 @@ pthread_mutex_t lock1,lock2;        /*creo un candado para dos funciones que con
 int main() {
     
     int fin, boton=0 ,i;
-    
+#ifdef PC                   //solo se utiliza si lo vamos a jugat con allegro
     int init_correct=inicializacion();
     if (init_correct== -1){
         printf("fallo en inicializacion de ALLEGRO\n");
         vida=0;   
-    }
+    } 
+    pthread_create(&th1,NULL,entrad_allegro,NULL);  //modificado para allegro
+#endif
     
+#ifdef RASPI
+    //alguna inicializacion
+     pthread_create(&th1,NULL,entrad,NULL);  
+#endif
     niveles[0]=&lvl_1;
     niveles[1]=&lvl_2;
     niveles[2]=&lvl_3;
     
-    pthread_create(&th1,NULL,entrad_allegro,NULL);  //modificado para allegro
+   
     pthread_create(&th2,NULL,caida,NULL);
     pthread_create(&th3,NULL,enemigo_pez,NULL);
     pthread_create(&th4,NULL,enemigo_pes,NULL);
@@ -101,11 +109,14 @@ int main() {
                     pos[0]=0;
                     pos[1]=0;
                     pos[2]=0;
+#ifdef PC
                     al_draw_scaled_bitmap(mar,0, 0, al_get_bitmap_width(mar), al_get_bitmap_height(mar),0, 0, LARGO_DISPLAY, ANCHO_DISPLAY,0);      //CARGO BACKGROUND Y LO MUESTRO
-                    al_flip_display();                    
-                    //printmat(*niveles[0]);  //imprime el nivel
+                    al_flip_display();                                        
                     print_map_allegro(*niveles[0]);
-                    
+#endif   
+#ifdef RASPI
+                    printmat(*niveles[0]);  //imprime el nivel
+#endif
                     i=0;fin=1; break;
             case 2 :
                     printf("**************NIVEL 2*****************\n");
@@ -113,10 +124,15 @@ int main() {
                     pos[0]=0;
                     pos[1]=0;
                     pos[2]=0;
+#ifdef PC
                     al_draw_scaled_bitmap(mar,0, 0, al_get_bitmap_width(mar), al_get_bitmap_height(mar),0, 0, LARGO_DISPLAY, ANCHO_DISPLAY,0);      //CARGO BACKGROUND Y LO MUESTRO
-                    al_flip_display();
-                    //printmat(*niveles[1]);  //
+                    al_flip_display();              
                     print_map_allegro(*niveles[1]);
+#endif
+#ifdef RASPI
+                  printmat(*niveles[1]);  //
+#endif
+                    
                     i=1;fin=1;boton=0;break;
             case 3 :
                     printf("**************NIVEL 3*****************\n");
@@ -124,10 +140,14 @@ int main() {
                     pos[0]=0;
                     pos[1]=0;
                     pos[2]=0;
+#ifdef PC
                     al_draw_scaled_bitmap(mar,0, 0, al_get_bitmap_width(mar), al_get_bitmap_height(mar),0, 0, LARGO_DISPLAY, ANCHO_DISPLAY,0);      //CARGO BACKGROUND Y LO MUESTRO
-                    al_flip_display();
-                    //printmat(*niveles[2]);  //
+                    al_flip_display();                   
                     print_map_allegro(*niveles[2]);
+#endif
+#ifdef RASPI
+                    printmat(*niveles[2]);  //
+#endif
                     boton=0;i=2;fin=1;break;
             default:
                 fin=0;vida=0;break;
@@ -154,17 +174,26 @@ int main() {
                 int val=reglas(*niveles[i],boton); /*val, guarda la evaluacion de reglas*/
                 if(val==0){                  /*si el movimiento esta permitido , lo mueve efectivamente*/
                     
-                    movimiento(*niveles[i],boton); /*realza el movimiento efectivo, solo de Mario*/
-                    //printmat(*niveles[i]);
+                    movimiento(*niveles[i],boton); /*realza el movimiento efectivo, solo de Mario*/         
+#ifdef PC
                     print_map_allegro(*niveles[i]);
+#endif
+#ifdef RASPI
+                    printmat(*niveles[i]);
+#endif
                     tecla=0;
                 }
                 else if(val==2){             /*recogio una moneda*/   
                     puntaje+=10;
                     printf("PUNTAJE:%d\n",puntaje);
-                    movimiento(*niveles[i],boton);
-                    //printmat(*niveles[i]);
+                    movimiento(*niveles[i],boton);                    
+#ifdef PC
                     print_map_allegro(*niveles[i]);
+#endif
+#ifdef RASPI
+                 printmat(*niveles[i]);   
+#endif
+
                     tecla=0;
                 }
                 else if(val==4){    //paso de nivel
@@ -193,17 +222,22 @@ int main() {
                 }
              
             }
-            else{           //si no se detecto niguna entra por el teclado,acrualiza pantalla
+#ifdef PC           
+            else{           //si no se detecto niguna entra por el teclado,acrualiza pantalla       
+
                 print_map_allegro(*niveles[i]);
             }
-          
+ #endif         
         }
         
     }
     printf("cerrando allegro\n");
     stop=pausa;
+    
+#ifdef PC
     /*DESTROY ALLEGRO*/
     destroy_allegro();
+#endif
     return 0;
 }
     
@@ -421,8 +455,10 @@ void*  caida ( ){
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
  
-//entrada vieja , capz sirve//    
- /*   while(1){
+//entrada vieja , capz sirve// 
+void* entrad (){
+    int i;
+    while(1){
         i=getchar();
         if(i=='W' || i=='w'){ //up
             getchar();       //libero buffer
@@ -455,7 +491,7 @@ void*  caida ( ){
             return 0;
         }
     }    
-}/*
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                                                                                //
