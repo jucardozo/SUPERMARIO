@@ -17,14 +17,14 @@
 #include <stdbool.h>
 #include <unistd.h>
 #include "levels.h"         
-#include <allegro5/allegro5.h>
+#include "allegro.h"
+/*#include <allegro5/allegro5.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_audio.h> // NO OLVIDAR AGREGAR EN EL LINKER DEL PROYECTO
-#include <allegro5/allegro_acodec.h> // NO OLVIDAR AGREGAR EN EL LINKER DEL PROYECTO
+#include <allegro5/allegro_acodec.h> // NO OLVIDAR AGREGAR EN EL LINKER DEL PROYECTO*/
 
 /*define*/
 
-/*provisorio, solo para que quede escrita la funcion reglas*/
 #define up 100
 #define right 101
 #define left 102
@@ -32,42 +32,16 @@
 #define pausa 104
 #define salir 105
 
-#define FPS    60.0
-
-/*ALLEGRO*/
-#define LARGO_DISPLAY 640      //TAMANIO DE IMAGEN
-#define ANCHO_DISPLAY 544      //TAMANIO DE IMAGEN
-
-ALLEGRO_DISPLAY *display;                       //se crean  puntero hacia estrucuras de allegro
-ALLEGRO_BITMAP *mar;                         //que nos permitiran utilizar ciertas funciones de
-ALLEGRO_BITMAP *agua;                           //allegro.
-ALLEGRO_BITMAP *alga; 
-ALLEGRO_BITMAP *lobby;
-ALLEGRO_BITMAP *nintendo;
-ALLEGRO_BITMAP *press_start;
-ALLEGRO_BITMAP *bloque;
-ALLEGRO_BITMAP *mario_adelante;
-ALLEGRO_BITMAP *mario_atras;                         
-ALLEGRO_BITMAP *moneda;                   
-ALLEGRO_BITMAP *final;
-ALLEGRO_BITMAP *pez;
-ALLEGRO_BITMAP *pes;
-ALLEGRO_BITMAP *pulpo;
-ALLEGRO_SAMPLE *music = NULL;                  //Musica
-ALLEGRO_TIMER *timer = NULL;
-ALLEGRO_EVENT_QUEUE *event_queue = NULL;        //Cola de eventos
-
-
 
 /* prototipos*/
 void bienvenida (void);
-void destroy_allegro (void);
+
 void printmat(int arr[ALTURA][LARGO]); /*creo que no es necesario pasarle una arreglo*/
 void movimiento(int arr[ALTURA][LARGO],int boton);  /*realiza el movimiento efectivo de mario*/
 void ctrl_posicion(int arr[ALTURA][LARGO],int pos[3]);  /*Funcion que busca la posicion de mario en el mapa (Matriz), se le pasa el nivel y la cantidad de movimiento del mapa*/
 int reglas (int arr[ALTURA][LARGO],int boton);      /*evalua la validez del movimietno del mario*/
 void * caida ();    /*caida de mario , impuesta por la gravedad */
-void * entrad_allegro();    /*recibe por comando el movimiento deseado por el jugador*/
+
 void * enemigo_pez();
 void * enemigo_pes();
 void * enemigo_pulpo();
@@ -77,7 +51,7 @@ void print_map_allegro(int arr [ALTURA][LARGO]);        //imprime mapa allegro
 
 
 /*Globales*/
-int nivel=3;
+int nivel=1;
 int stop;           //variable que uso para pausar el juego
 int puntaje=0;      /*se lleva el conteo del puntaje*/
 int vida=3;         /*se lleva el conteo de las vidas*/
@@ -90,7 +64,6 @@ int lvl_3 [ALTURA][LARGO];
 
 
 /**********************************/
-/*OBSERVACIONES: el motor del juego , se podria hacer con un mutex, de esta manera , se escribiria menos codigo.
 /**********************************/
 /*MUTEX Y THREAD*/
 pthread_t th1,th2,th3,th4,th5;                  /*se crean thread para funciones necesarias*/
@@ -102,243 +75,14 @@ pthread_mutex_t lock1,lock2;        /*creo un candado para dos funciones que con
 
 int main() {
     
-   /*ALLEGROOOOOOO*/
-    /*INICIALIZACION DE ALLEGRO*/
-    if (!al_init()){
-        fprintf(stderr, "Unable to start allegro\n");                        //realizo la inicializacion de allegro
-        return -1;
-    } 
-    else if (!al_init_image_addon()) {
-        fprintf(stderr, "Unable to start image addon \n");          //si hubo un error en la inicializacion imprimo el srderr
-        al_uninstall_system();
-        return -1;
-    } 
-    else if (!(display = al_create_display(LARGO_DISPLAY, ANCHO_DISPLAY))) {         //se controlan si hubo problemas en las
-        fprintf(stderr, "Unable to create display\n");                              //distintas inicializaciones 
-        al_uninstall_system();
-        al_shutdown_image_addon();                              
-        return -1;
-    } 
-    else if (!(nintendo = al_load_bitmap("nintendo.jpg"))) {           //se carga imagen de nintendo
-        fprintf(stderr, "Unable to load nintendo\n");
-        al_uninstall_system();
-        al_shutdown_image_addon();
-        al_destroy_display(display);
-        return -1;
-    }
-    else if (!(lobby = al_load_bitmap("lobby.jpg"))) {           //se carga imagen de lobby
-        fprintf(stderr, "Unable to load lobby\n");
-        al_uninstall_system();
-        al_shutdown_image_addon();
-        al_destroy_display(display);
-        return -1;
-    }
-    else if (!(press_start = al_load_bitmap("press_start.jpg"))) {           //se carga imagen de press_start
-        fprintf(stderr, "Unable to load press_start\n");
-        al_uninstall_system();
-        al_shutdown_image_addon();
-        al_destroy_display(display);
-        return -1;
-    }
-    else if (!(mar = al_load_bitmap("mar.jpg"))) {              // se carga en un bitmap la imagen que usaremos de base
-        fprintf(stderr, "Unable to load mar\n");
-        al_uninstall_system();
-        al_shutdown_image_addon();
-        al_destroy_display(display);
-        return -1;
-    }
-    else if (!(agua = al_load_bitmap("agua.png"))) {           //se carga imagen de agua
-        fprintf(stderr, "Unable to load agua\n");
-        al_uninstall_system();
-        al_shutdown_image_addon();
-        al_destroy_display(display);
-        return -1;
-    }
-    else if (!(alga = al_load_bitmap("alga.png"))) {           //se carga imagen de alga
-        fprintf(stderr, "Unable to load alga\n");
-        al_uninstall_system();
-        al_shutdown_image_addon();
-        al_destroy_display(display);
-        return -1;
-    }
-    else if (!(bloque = al_load_bitmap("bloque.png"))) {           //se carga imagen de bloque
-        fprintf(stderr, "Unable to load bloque\n");
-        al_uninstall_system();
-        al_shutdown_image_addon();
-        al_destroy_display(display);
-        return -1;
-    }
-    else if (!(mario_adelante = al_load_bitmap("mario_adelante.png"))) {           //se carga imagen de mario mirando hacia adelante
-        fprintf(stderr, "Unable to load mario_adelante\n");
-        al_uninstall_system();
-        al_shutdown_image_addon();
-        al_destroy_display(display);
-        return -1;
-    }
-    else if (!(mario_atras = al_load_bitmap("mario_atras.png"))) {           //se carga imagen de mario mirando hacia atras
-        fprintf(stderr, "Unable to load mario_atras\n");
-        al_uninstall_system();
-        al_shutdown_image_addon();
-        al_destroy_display(display);
-        return -1;
-    }
-    else if (!(moneda = al_load_bitmap("moneda.png"))) {           //se carga imagen de moneda
-        fprintf(stderr, "Unable to load moneda\n");
-        al_uninstall_system();
-        al_shutdown_image_addon();
-        al_destroy_display(display);
-        return -1;
-    }
-    else if (!(final = al_load_bitmap("final.png"))) {           //se carga imagen de final
-        fprintf(stderr, "Unable to load final\n");
-        al_uninstall_system();
-        al_shutdown_image_addon();
-        al_destroy_display(display);
-        return -1;
-    }
-    else if (!(pez = al_load_bitmap("pez.png"))) {           //se carga imagen de pez
-        fprintf(stderr, "Unable to load pez\n");
-        al_uninstall_system();
-        al_shutdown_image_addon();
-        al_destroy_display(display);
-        return -1;
-    }
-    else if (!(pes = al_load_bitmap("pes.png"))) {           //se carga imagen de pes
-        fprintf(stderr, "Unable to load pes\n");
-        al_uninstall_system();
-        al_shutdown_image_addon();
-        al_destroy_display(display);
-        return -1;
-    }
-    else if (!(pulpo = al_load_bitmap("pulpo.png"))) {           //se carga imagen de pulpo
-        fprintf(stderr, "Unable to load pulpo\n");
-        al_uninstall_system();
-        al_shutdown_image_addon();
-        al_destroy_display(display);
-        return -1;
-    }
-    /*INICIALIZACION TIMER*/
-    timer = al_create_timer(1.0 / FPS); //crea el timer pero NO empieza a correr
-    if (!timer) {
-        fprintf(stderr, "failed to create timer!\n");
-        return -1;
-    }
-    
-    /*INICIALIZAION MUSICA*/
-    if (!al_install_audio()) {                                      //Inicializo el audio                                                   //
-        fprintf(stderr, "failed to initialize audio!\n");                                                                                   //
-        al_uninstall_system();                                                                                                              //
-        al_shutdown_image_addon();                                                                                                          //
-        al_destroy_display(display);                                                                                                        //
-        return -1;                                                                                                                          //
-    }                                                                                                                                       //
-                                                                                                                                            //
-    if (!al_init_acodec_addon()) {                                                                                                          //
-        fprintf(stderr, "failed to initialize audio codecs!\n");                                                                            //
-        al_uninstall_system();                                                                                                              //
-        al_shutdown_image_addon();                                                                                                          //
-        al_destroy_display(display);                                                                                                        //
-        return -1;                                                                                                                          //
-    }                                                                                                                                       //
-                                                                                                                                            //
-    if (!al_reserve_samples(1)) {                                                                                                           //
-        fprintf(stderr, "failed to reserve samples!\n");                                                                                    //
-        al_uninstall_system();                                                                                                              //
-        al_shutdown_image_addon();                                                                                                          //
-        al_destroy_display(display);                                                                                                        //
-        return -1;                                                                                                                          //
-    }                                                                                                                                       //
-                                                                                                                                            //
-    music = al_load_sample("musica.wav");                                                                                                   //
-                                                                                                                                            //
-    if (!music) {                                                                                                                           //
-        printf("Audio clip sample not loaded!\n");                                                                                          //
-        al_uninstall_system();                                                                                                              //
-        al_shutdown_image_addon();                                                                                                          //
-        al_destroy_display(display);                                                                                                        //
-        return -1;                                                                                                                          //
-    }    
-    
-    
-    //////////////////////////////////
-    /*INICIALIZO EVENTOS Y TECLADO*///
-    /////////////////////////////////////////////////////////////////////////////////////////////////////
-    event_queue = al_create_event_queue();                                                             //
-    if (!event_queue) {                                                                                //
-        fprintf(stderr, "failed to create event_queue!\n");                                            //
-        destroy_allegro();                                                                             //
-        return -1;                                                                                     //
-    }                                                                                                  //
-    if (!al_install_keyboard()) {                                                                      //
-        fprintf(stderr, "failed to initialize the keyboard!\n");                                       //
-        destroy_allegro();                                                                             //
-        return -1;                                                                                     //
-    }                                                                                                  //
-    al_register_event_source(event_queue, al_get_keyboard_event_source());       //Evento teclado      //
-    al_register_event_source(event_queue, al_get_display_event_source(display)); //Cruz roja de salir  //
-    /////////////////////////////////////////////////////////////////////////////////////////////////////
-      
-    
-    
-    
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////*BIENVENIDA POR DISPLAY Y PANTALLA*////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
-    /*PANTALLA NINTENDO + MUSICA*/
-    bienvenida();       //bienvenida por display
-    al_clear_to_color(al_map_rgb(255, 255, 255));
-    al_flip_display();
-    al_rest(1.0);
-    al_play_sample(music, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, NULL);              //Damos bienvenida al usuario 
-    al_draw_scaled_bitmap(nintendo,0, 0, al_get_bitmap_width(nintendo), al_get_bitmap_height(nintendo),0, 0, LARGO_DISPLAY, ANCHO_DISPLAY,0);      //imprimo nintendo                                //
-    al_flip_display();                                                      //Muestro la imagen de bienvenida
-    al_rest(4.0);
-    al_clear_to_color(al_map_rgb(255, 255, 255));
-    al_flip_display();
-    al_rest(1.0);
-    al_draw_scaled_bitmap(lobby,0, 0, al_get_bitmap_width(lobby), al_get_bitmap_height(lobby),0, 0, LARGO_DISPLAY, ANCHO_DISPLAY,0);      //imprimo lobby
-    al_flip_display();
-    
-    /*PANTALLA DE LOBBY + PRESS_START*/
-    int mientras = 1;
-    while (mientras){                                             //Me quedo aca hasta que se apriete enter o se cierre el programa                             //
-        ALLEGRO_EVENT ev0;                                                 //Struct toma todos los eventos de la cola                                                    //
-        if (al_get_next_event(event_queue, &ev0)){                   //Damos entrada de teclado por allegro                                                              //
-            if (ev0.type == ALLEGRO_EVENT_DISPLAY_CLOSE){            //Si se quiso cerrar el display                                                                     //
-                destroy_allegro();                                                                                                                                //
-                return 0;                                                                                                                                                //
-            }                                                                                                                                                            //
-            else if ((ev0.type == ALLEGRO_EVENT_KEY_DOWN) && (ev0.keyboard.keycode == ALLEGRO_KEY_ENTER)|| (ev0.keyboard.keycode == ALLEGRO_KEY_SPACE)){              //sino tranqui, salgo del while sin problema     //
-                mientras = 0;   
-            }
-        }    
-        al_draw_bitmap(press_start,100,340,0);          //IMPRIMO PRESS START
-        al_flip_display();
-        al_rest(1.0);
-        al_draw_scaled_bitmap(lobby,0, 0, al_get_bitmap_width(lobby), al_get_bitmap_height(lobby),0, 0, LARGO_DISPLAY, ANCHO_DISPLAY,0);        //HAGO TITILARLO
-        al_flip_display();
-        al_rest(1.0);
-    }                               //HASTA QUE SE APRETE ENTER O ESPACIO
-   
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
-    
-    
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////*SE ARRANCA A JUGAR*/////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
-    
-    
-    
-    
-    /*FIN DE ALLEGROOO*/
-    
     int fin, boton=0 ,i;
     
-   
+    int init_correct=inicializacion();
+    if (init_correct== -1){
+        printf("fallo en inicializacion de ALLEGRO\n");
+        vida=0;   
+    }
+    
     niveles[0]=&lvl_1;
     niveles[1]=&lvl_2;
     niveles[2]=&lvl_3;
@@ -348,8 +92,6 @@ int main() {
     pthread_create(&th3,NULL,enemigo_pez,NULL);
     pthread_create(&th4,NULL,enemigo_pes,NULL);
     pthread_create(&th5,NULL,enemigo_pulpo,NULL);
-    
-    
     
     while(vida>0){
         switch(nivel){          //habilita el control, automatico, de cada enemigo en cada nivel//
@@ -643,7 +385,7 @@ void*  caida ( ){
     while(1){
         while(stop){        //paauso el thread , porque pausaron le juego
         }
-        sleep(2);
+        sleep(1);
         ctrl_posicion(*niveles[nivel-1],pos);
         val=reglas(*niveles[nivel-1],boton_aux);
         if(val==0){                  /*si el movimiento esta permitido , lo mueve efectivamente*/
@@ -671,91 +413,15 @@ void*  caida ( ){
                 printf("PUNTAJE: %d",puntaje);
             }
         }
-        sleep(2);
+
     }
     
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void *entrad_allegro(){
-    enum MYKEYS {
-    KEY_W, KEY_S, KEY_A, KEY_D,ESC,ENTER,ESPACIO //enumero mis letras oa q quede mas fachero el arrgelo
-    };
-    bool key_pressed[5] = {false, false, false, false,false}; //Estado de teclas, true cuando esta apretada
-    while(1){
-        
-        ALLEGRO_EVENT ev;
-        if (al_get_next_event(event_queue, &ev)){ //Toma un evento de la cola.
-            if (ev.type == ALLEGRO_EVENT_KEY_DOWN) {       //pregunta si hay alguna tecla presionada,
-                    switch (ev.keyboard.keycode) {         //en el caso de que lo haya marca como true, la presionada
-                        case ALLEGRO_KEY_W:
-                        case ALLEGRO_KEY_UP:
-                            key_pressed[KEY_W] = true;
-                            tecla=up;
-                            break;
-
-                        case ALLEGRO_KEY_S:
-                        case ALLEGRO_KEY_DOWN:
-                            key_pressed[KEY_S] = true;
-                            tecla=down;
-                            break;
-
-                        case ALLEGRO_KEY_A:
-                        case ALLEGRO_KEY_LEFT:
-                            key_pressed[KEY_A] = true;
-                            tecla=left;
-                            break;
-
-                        case ALLEGRO_KEY_D:
-                        case ALLEGRO_KEY_RIGHT:
-                            key_pressed[KEY_D] = true;
-                            tecla=right;
-                            break;
-                            
-                        case ALLEGRO_KEY_ESCAPE:
-                            key_pressed[ESC]=true;
-                            tecla=pausa;
-                            break;
-                    }
-                }
-                else if (ev.type == ALLEGRO_EVENT_KEY_UP) {
-                    switch (ev.keyboard.keycode) {
-                        case ALLEGRO_KEY_W:
-                        case ALLEGRO_KEY_UP:
-                            key_pressed[KEY_W] = false;
-                            break;
-
-                        case ALLEGRO_KEY_S:
-                        case ALLEGRO_KEY_DOWN:
-                            key_pressed[KEY_S] = false;
-                            break;
-
-                        case ALLEGRO_KEY_A:
-                        case ALLEGRO_KEY_LEFT:
-                            key_pressed[KEY_A] = false;
-                            break;
-
-                        case ALLEGRO_KEY_D:
-                        case ALLEGRO_KEY_RIGHT:
-                            key_pressed[KEY_D] = false;
-                            break;
-
-                        case ALLEGRO_KEY_ESCAPE:
-                            key_pressed[ESC]=false;
-                            break;
-                    }
-                }
-                else if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE){            //Si se quiso cerrar el display                                                                     //
-                    tecla=salir;
-                    
-                }
-
-            }
-    }
-}
  
-    
+//entrada vieja , capz sirve//    
  /*   while(1){
         i=getchar();
         if(i=='W' || i=='w'){ //up
@@ -1186,130 +852,3 @@ void bienvenida (void){
     printf("Bienvenido a la beta del super mario\n");
 }
 
-
-
-void destroy_allegro (void){
-    al_destroy_display(display);                //se libera la memoria dinamica , destruyendo los elemntos usados
-    al_destroy_bitmap(nintendo);
-    al_destroy_bitmap(lobby);
-    al_destroy_bitmap(press_start);
-    al_destroy_bitmap(mar);
-    al_destroy_bitmap(agua);
-    al_destroy_bitmap(alga);
-    al_destroy_bitmap(bloque);
-    al_destroy_bitmap(mario_adelante);
-    al_destroy_bitmap(mario_atras);
-    al_destroy_bitmap(moneda);
-    al_destroy_bitmap(final);
-    al_destroy_bitmap(pez);
-    al_destroy_bitmap(pes);
-    al_destroy_bitmap(pulpo);
-    al_uninstall_audio();                                                                                                                                    //
-    al_destroy_sample(music);
-    al_destroy_timer(timer);
-    al_destroy_event_queue(event_queue); 
-}
-
-
-
-
-void print_map_allegro(int arr [ALTURA][LARGO]){
-    
-
-     float largo_elemento=0;
-     float alto_elemento=0;
- 
-    if(((16+pos[2])-pos[1])<=8){        //se lee la columna en donde esta mario y se mueve le mapa si esta en la mitad
-        pos[2]+=4;                      //la cantidad de este movimineto se guarda en el tercer elemento del arreglo, se elije por default que se mueva de a 4
-    }  
-    if(pos[2]<56){
-        for (int i=0;i<16;i++){
-            for(int p=pos[2]; p<(16+pos[2]);p++){
-
-                switch(arr[i][p]){
-                    case AGUA:
-                        al_draw_bitmap(agua,largo_elemento,alto_elemento,0);
-                        break;
-                    case BLOQUE:
-                        al_draw_bitmap(bloque,largo_elemento,alto_elemento,0);
-                        break;
-                    case ALGA:
-                        al_draw_bitmap(alga,largo_elemento,alto_elemento,0);
-                        break;
-                    case FINAL:
-                        al_draw_bitmap(final,largo_elemento,alto_elemento,0);
-                        break;
-                    case MONEDA:
-                        al_draw_bitmap(moneda,largo_elemento,alto_elemento,0);
-                        break;
-                    case PEZ:
-                        al_draw_bitmap(pez,largo_elemento,alto_elemento,0);
-                        break;
-                    case PES:
-                        al_draw_bitmap(pes,largo_elemento,alto_elemento,0);
-                        break;
-                    case PULPO:
-                        al_draw_bitmap(pulpo,largo_elemento,alto_elemento,0);
-                        break;
-                    case MARIO:
-                        al_draw_bitmap(mario_adelante,largo_elemento,alto_elemento,0);
-                        break;
-                    default:
-                        break;
-                }
-                largo_elemento += LARGO_ELEMENTO;
-            }
-            largo_elemento = 0;
-            alto_elemento += ALTO_ELEMENTO;
-
-        }
-     
-        al_flip_display();
-    }
-    else{
-        for (int i=0;i<16;i++){
-            for(int p=54; p<(70);p++){
-
-                switch(arr[i][p]){
-                    case PRECIPICIO:
-                    case AGUA:
-                        al_draw_bitmap(agua,largo_elemento,alto_elemento,0);
-                        break;
-                    case BLOQUE:
-                        al_draw_bitmap(bloque,largo_elemento,alto_elemento,0);
-                        break;
-                    case ALGA:
-                        al_draw_bitmap(alga,largo_elemento,alto_elemento,0);
-                        break;
-                    case FINAL:
-                        al_draw_bitmap(final,largo_elemento,alto_elemento,0);
-                        break;
-                    case MONEDA:
-                        al_draw_bitmap(moneda,largo_elemento,alto_elemento,0);
-                        break;
-                    case PEZ:
-                        al_draw_bitmap(pez,largo_elemento,alto_elemento,0);
-                        break;
-                    case PES:
-                        al_draw_bitmap(pes,largo_elemento,alto_elemento,0);
-                        break;
-                    case PULPO:
-                        al_draw_bitmap(pulpo,largo_elemento,alto_elemento,0);
-                        break;
-                    case MARIO:
-                        al_draw_bitmap(mario_adelante,largo_elemento,alto_elemento,0);
-                        break;
-                    default:
-                        break;
-                }
-                largo_elemento += LARGO_ELEMENTO;
-            }
-            largo_elemento = 0;
-            alto_elemento += ALTO_ELEMENTO;
-        }
-     
-        al_flip_display();
-    }
-  
- }
-  

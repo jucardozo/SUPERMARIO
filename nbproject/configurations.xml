@@ -4,31 +4,33 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>allegro.h</itemPath>
       <itemPath>levels.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
                    projectFiles="true">
-      <itemPath>../super/agua.png</itemPath>
-      <itemPath>../super/alga.png</itemPath>
-      <itemPath>../super/bloque.png</itemPath>
-      <itemPath>../super/final.png</itemPath>
-      <itemPath>../super/lobby.jpg</itemPath>
-      <itemPath>../super/mar.jpg</itemPath>
-      <itemPath>../super/mario_adelante.png</itemPath>
-      <itemPath>../super/mario_atras.png</itemPath>
-      <itemPath>../super/moneda.png</itemPath>
-      <itemPath>../super/musica.wav</itemPath>
-      <itemPath>../super/nintendo.jpg</itemPath>
-      <itemPath>../super/pes.png</itemPath>
-      <itemPath>../super/pez.png</itemPath>
-      <itemPath>../super/press_start.jpg</itemPath>
-      <itemPath>../super/pulpo.png</itemPath>
+      <itemPath>agua.png</itemPath>
+      <itemPath>alga.png</itemPath>
+      <itemPath>bloque.png</itemPath>
+      <itemPath>final.png</itemPath>
+      <itemPath>lobby.jpg</itemPath>
+      <itemPath>mar.jpg</itemPath>
+      <itemPath>mario_adelante.png</itemPath>
+      <itemPath>mario_atras.png</itemPath>
+      <itemPath>moneda.png</itemPath>
+      <itemPath>musica.wav</itemPath>
+      <itemPath>nintendo.jpg</itemPath>
+      <itemPath>pes.png</itemPath>
+      <itemPath>pez.png</itemPath>
+      <itemPath>press_start.jpg</itemPath>
+      <itemPath>pulpo.png</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
-      <itemPath>../../Descargas/levels.c</itemPath>
+      <itemPath>allegro.c</itemPath>
+      <itemPath>levels.c</itemPath>
       <itemPath>main.c</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -72,41 +74,45 @@
           </linkerLibItems>
         </linkerTool>
       </compileType>
-      <item path="../../Descargas/levels.c" ex="false" tool="0" flavor2="0">
+      <item path="agua.png" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="../super/agua.png" ex="false" tool="3" flavor2="0">
+      <item path="alga.png" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="../super/alga.png" ex="false" tool="3" flavor2="0">
+      <item path="allegro.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="../super/bloque.png" ex="false" tool="3" flavor2="0">
+      <item path="allegro.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="../super/final.png" ex="false" tool="3" flavor2="0">
+      <item path="bloque.png" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="../super/lobby.jpg" ex="false" tool="3" flavor2="0">
+      <item path="final.png" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="../super/mar.jpg" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../super/mario_adelante.png" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../super/mario_atras.png" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../super/moneda.png" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../super/musica.wav" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../super/nintendo.jpg" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../super/pes.png" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../super/pez.png" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../super/press_start.jpg" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../super/pulpo.png" ex="false" tool="3" flavor2="0">
+      <item path="levels.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="levels.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="lobby.jpg" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="main.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="mar.jpg" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="mario_adelante.png" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="mario_atras.png" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="moneda.png" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="musica.wav" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="nintendo.jpg" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="pes.png" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="pez.png" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="press_start.jpg" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="pulpo.png" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
     <conf name="Release" type="1">
@@ -129,41 +135,45 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
-      <item path="../../Descargas/levels.c" ex="false" tool="0" flavor2="0">
+      <item path="agua.png" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="../super/agua.png" ex="false" tool="3" flavor2="0">
+      <item path="alga.png" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="../super/alga.png" ex="false" tool="3" flavor2="0">
+      <item path="allegro.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="../super/bloque.png" ex="false" tool="3" flavor2="0">
+      <item path="allegro.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="../super/final.png" ex="false" tool="3" flavor2="0">
+      <item path="bloque.png" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="../super/lobby.jpg" ex="false" tool="3" flavor2="0">
+      <item path="final.png" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="../super/mar.jpg" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../super/mario_adelante.png" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../super/mario_atras.png" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../super/moneda.png" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../super/musica.wav" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../super/nintendo.jpg" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../super/pes.png" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../super/pez.png" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../super/press_start.jpg" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../super/pulpo.png" ex="false" tool="3" flavor2="0">
+      <item path="levels.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="levels.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="lobby.jpg" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="main.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="mar.jpg" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="mario_adelante.png" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="mario_atras.png" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="moneda.png" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="musica.wav" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="nintendo.jpg" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="pes.png" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="pez.png" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="press_start.jpg" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="pulpo.png" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>

@@ -544,7 +544,7 @@ void creacionmap(int que_nivel){        //creacion de los mapas, niveles: 1,2 y 
                     lvl_3[15][k]=PRECIPICIO;        ///
             }
             
-            for(int j= 62 ;j<= LARGO ;j++)
+            for(int j= 62 ;j< LARGO ;j++)
             {
                     lvl_3[14][j]=BLOQUE;
                     lvl_3[15][j]=BLOQUE;            ///
