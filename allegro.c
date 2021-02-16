@@ -520,10 +520,6 @@ int menu_allegro(int punt, int niv,int vid){
             stop=0;
             end=0;
             tecla=0;
-             //al_clear_to_color(al_map_rgb(255, 255, 255));
-             //al_draw_text(font_pausa, al_map_rgb(0, 0, 0), FONT_NIVEL_X, FONT_NIVEL_Y, ALLEGRO_ALIGN_CENTER, "reanudando juego...");
-             //al_flip_display();
-             //al_rest(1.5);
              draw_background(punt,vid);
         }  
         else if( tecla==salir){
