@@ -80,6 +80,7 @@ ALLEGRO_BITMAP *final;
 ALLEGRO_BITMAP *pez;
 ALLEGRO_BITMAP *pes;
 ALLEGRO_BITMAP *pulpo;
+ALLEGRO_BITMAP *men_pausa;
 
 #ifdef __cplusplus
 }

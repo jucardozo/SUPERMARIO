@@ -24,6 +24,7 @@
       <itemPath>moneda.png</itemPath>
       <itemPath>musica.wav</itemPath>
       <itemPath>nintendo.jpg</itemPath>
+      <itemPath>pausa.jpg</itemPath>
       <itemPath>pes.png</itemPath>
       <itemPath>pez.png</itemPath>
       <itemPath>press_start.jpg</itemPath>
@@ -119,6 +120,8 @@
       </item>
       <item path="nintendo.jpg" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="pausa.jpg" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="pes.png" ex="false" tool="3" flavor2="0">
       </item>
       <item path="pez.png" ex="false" tool="3" flavor2="0">
@@ -193,6 +196,8 @@
       <item path="musica.wav" ex="false" tool="3" flavor2="0">
       </item>
       <item path="nintendo.jpg" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="pausa.jpg" ex="false" tool="3" flavor2="0">
       </item>
       <item path="pes.png" ex="false" tool="3" flavor2="0">
       </item>

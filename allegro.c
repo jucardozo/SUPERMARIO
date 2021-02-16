@@ -89,6 +89,13 @@ int inicializacion(){
         al_destroy_display(display);
         return -1;
     }
+    else if (!(men_pausa = al_load_bitmap("pausa.jpg"))) {           //se carga imagen para el menu de pausa
+        fprintf(stderr, "Unable to load men_pausa\n");
+        al_uninstall_system();
+        al_shutdown_image_addon();
+        al_destroy_display(display);
+        return -1;
+    }
     else if (!(alga = al_load_bitmap("alga.png"))) {           //se carga imagen de alga
         fprintf(stderr, "Unable to load alga\n");
         al_uninstall_system();
@@ -159,7 +166,7 @@ int inicializacion(){
     
     font = al_load_ttf_font("letritas.ttf", 36, 0); //HAY CREAR UN FONT PARA CADA TAMAÑO DE LETRA 
     font_nivel = al_load_ttf_font("letritas.ttf", 100, 0); //HAY CREAR UN FONT PARA CADA TAMAÑO DE LETRA 
-    font_pausa = al_load_ttf_font("letritas.ttf", 50, 0); //HAY CREAR UN FONT PARA CADA TAMAÑO DE LETRA
+    font_pausa = al_load_ttf_font("letritas.ttf", 36, 0); //HAY CREAR UN FONT PARA CADA TAMAÑO DE LETRA
     
     if (!font) {
         fprintf(stderr, "Could not load 'letritas.ttf'.\n");
@@ -502,13 +509,10 @@ void draw_background (int puntaje, int nivel){
 }
 
 int menu_allegro(int punt, int niv,int vid){
-    al_clear_to_color(al_map_rgb(255, 255, 255));
-    al_draw_textf(font_nivel, al_map_rgb(0, 0, 0), 300, 10, ALLEGRO_ALIGN_CENTER, "MENU(BETA)");
-    al_draw_textf(font_pausa, al_map_rgb(0, 0, 0), 130, 130, ALLEGRO_ALIGN_CENTER, "PUNTAJE  %d",punt);
-    al_draw_textf(font_pausa, al_map_rgb(0, 0, 0), 95, 200, ALLEGRO_ALIGN_CENTER, "NIVEL  %d",niv);
-    al_draw_textf(font_pausa, al_map_rgb(0, 0, 0), 100, 270, ALLEGRO_ALIGN_CENTER, "VIDAS  %d", vid);
-    al_draw_text(font_pausa, al_map_rgb(0, 0, 0), 300, 340, ALLEGRO_ALIGN_CENTER, "Para reanudar precionar esc");
-    al_draw_text(font_pausa, al_map_rgb(0, 0, 0), 295, 410, ALLEGRO_ALIGN_CENTER, "Para finalizar cerrar ventana");
+    
+    al_draw_bitmap(men_pausa,155,110,0);
+    al_draw_text(font_pausa, al_map_rgb(255, 255, 255), FONT_NIVEL_X,FONT_NIVEL_Y+20, ALLEGRO_ALIGN_CENTER, "PRESIONE ESC PARA CONTINUAR");
+    al_draw_text(font_pausa, al_map_rgb(255, 255, 255), FONT_NIVEL_X, FONT_NIVEL_Y+85, ALLEGRO_ALIGN_CENTER, "APRIETE LA X PARA CERRAR EL JUEGO");
     al_flip_display();
     int end=1;
     while(end){
@@ -516,10 +520,10 @@ int menu_allegro(int punt, int niv,int vid){
             stop=0;
             end=0;
             tecla=0;
-             al_clear_to_color(al_map_rgb(255, 255, 255));
-             al_draw_text(font_pausa, al_map_rgb(0, 0, 0), FONT_NIVEL_X, FONT_NIVEL_Y, ALLEGRO_ALIGN_CENTER, "reanudando juego...");
-             al_flip_display();
-             al_rest(1.5);
+             //al_clear_to_color(al_map_rgb(255, 255, 255));
+             //al_draw_text(font_pausa, al_map_rgb(0, 0, 0), FONT_NIVEL_X, FONT_NIVEL_Y, ALLEGRO_ALIGN_CENTER, "reanudando juego...");
+             //al_flip_display();
+             //al_rest(1.5);
              draw_background(punt,vid);
         }  
         else if( tecla==salir){
@@ -594,6 +598,7 @@ void destroy_allegro (void){
     al_destroy_bitmap(pez);
     al_destroy_bitmap(pes);
     al_destroy_bitmap(pulpo);
+    al_destroy_bitmap(men_pausa);
     al_uninstall_audio();                                                                                                                                    //
     al_destroy_sample(music);
     al_destroy_timer(timer);
