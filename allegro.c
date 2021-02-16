@@ -4,20 +4,10 @@
  * and open the template in the editor.
  */
 
-/* 
- * File:   allegro.c
- * Author: jucardozo
- *
- * Created on February 15, 2021, 10:07 AM
- */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include "allegro.h"
 
-/*
- * 
- */
 //los bitmaps estan definidos en el punto h
 ALLEGRO_DISPLAY *display;                       //se crean  puntero hacia estrucuras de allegro
 ALLEGRO_SAMPLE *music = NULL;                  //Musica
@@ -27,6 +17,8 @@ ALLEGRO_EVENT_QUEUE *event_queue = NULL;        //Cola de eventos*/
 extern int tecla;
 extern int pos[3];
 extern int vida;
+extern int fin;
+extern int stop;
 
 
 int inicializacion(){
@@ -166,8 +158,18 @@ int inicializacion(){
     al_init_ttf_addon(); // initialize the ttf (True Type Font) addon
     
     font = al_load_ttf_font("letritas.ttf", 36, 0); //HAY CREAR UN FONT PARA CADA TAMAÑO DE LETRA 
+    font_nivel = al_load_ttf_font("letritas.ttf", 100, 0); //HAY CREAR UN FONT PARA CADA TAMAÑO DE LETRA 
+    font_pausa = al_load_ttf_font("letritas.ttf", 50, 0); //HAY CREAR UN FONT PARA CADA TAMAÑO DE LETRA
     
     if (!font) {
+        fprintf(stderr, "Could not load 'letritas.ttf'.\n");
+        return -1;
+    }
+    if (!font_nivel) {
+        fprintf(stderr, "Could not load 'letritas.ttf'.\n");
+        return -1;
+    }
+    if (!font_pausa) {
         fprintf(stderr, "Could not load 'letritas.ttf'.\n");
         return -1;
     }
@@ -469,6 +471,7 @@ void print_map_allegro(int arr [ALTURA][LARGO]){
  }
 
 void draw_background (int puntaje, int nivel){
+    
     al_draw_scaled_bitmap(mar,0, 0, al_get_bitmap_width(mar), al_get_bitmap_height(mar),0, 0, LARGO_DISPLAY, ANCHO_DISPLAY,0);      //CARGO BACKGROUND Y LO MUESTRO
     al_draw_text(font, al_map_rgb(255, 255, 255), PUNTAJE_X , VISTA_Y , ALLEGRO_ALIGN_CENTER, "PUNTAJE:");
     al_draw_textf(font, al_map_rgb(255, 255, 255), PUNTAJE_NUMERO_X , VISTA_Y , ALLEGRO_ALIGN_CENTER, "%d",puntaje);
@@ -498,6 +501,49 @@ void draw_background (int puntaje, int nivel){
     }
 }
 
+int menu_allegro(int punt, int niv,int vid){
+    al_clear_to_color(al_map_rgb(255, 255, 255));
+    al_draw_textf(font_nivel, al_map_rgb(0, 0, 0), 300, 10, ALLEGRO_ALIGN_CENTER, "MENU(BETA)");
+    al_draw_textf(font_pausa, al_map_rgb(0, 0, 0), 130, 130, ALLEGRO_ALIGN_CENTER, "PUNTAJE  %d",punt);
+    al_draw_textf(font_pausa, al_map_rgb(0, 0, 0), 95, 200, ALLEGRO_ALIGN_CENTER, "NIVEL  %d",niv);
+    al_draw_textf(font_pausa, al_map_rgb(0, 0, 0), 100, 270, ALLEGRO_ALIGN_CENTER, "VIDAS  %d", vid);
+    al_draw_text(font_pausa, al_map_rgb(0, 0, 0), 300, 340, ALLEGRO_ALIGN_CENTER, "Para reanudar precionar esc");
+    al_draw_text(font_pausa, al_map_rgb(0, 0, 0), 295, 410, ALLEGRO_ALIGN_CENTER, "Para finalizar cerrar ventana");
+    al_flip_display();
+    int end=1;
+    while(end){
+        if( tecla==pausa){
+            stop=0;
+            end=0;
+            tecla=0;
+             al_clear_to_color(al_map_rgb(255, 255, 255));
+             al_draw_text(font_pausa, al_map_rgb(0, 0, 0), FONT_NIVEL_X, FONT_NIVEL_Y, ALLEGRO_ALIGN_CENTER, "reanudando juego...");
+             al_flip_display();
+             al_rest(1.5);
+             draw_background(punt,vid);
+        }  
+        else if( tecla==salir){
+            end=0;
+            al_clear_to_color(al_map_rgb(255, 255, 255));
+            al_draw_text(font_pausa, al_map_rgb(0, 0, 0), FONT_NIVEL_X, FONT_NIVEL_Y, ALLEGRO_ALIGN_CENTER, "saliendo del juego...");
+            al_flip_display();
+            al_rest(1.5);
+        }
+            
+    }
+   
+    return 0;
+}
+
+
+
+void print_lvl (int nivel){
+    al_rest(0.5);
+    al_draw_textf(font_nivel, al_map_rgb(0, 0, 0), FONT_NIVEL_X, FONT_NIVEL_Y , ALLEGRO_ALIGN_CENTER, "NIVEL %d",nivel);
+    al_draw_textf(font_nivel, al_map_rgb(255, 255, 255), FONT_NIVEL_X+5 , FONT_NIVEL_Y-5 , ALLEGRO_ALIGN_CENTER, "NIVEL %d",nivel);
+    al_flip_display();
+    al_rest(1.0);
+}
 
 void print_vida (void){
     if(vida==2){
@@ -510,6 +556,22 @@ void print_vida (void){
         al_draw_bitmap(vida_perdida,VIDA_2_X,VISTA_Y,0); 
         al_draw_bitmap(vida_perdida,VIDA_3_X,VISTA_Y,0);
     }
+    else if(vida==0){
+        al_draw_bitmap(vida_perdida,VIDA_1_X,VISTA_Y,0); 
+        al_draw_bitmap(vida_perdida,VIDA_2_X,VISTA_Y,0); 
+        al_draw_bitmap(vida_perdida,VIDA_3_X,VISTA_Y,0);
+    }
+}
+
+void print_gameover(int puntaje){
+    al_clear_to_color(al_map_rgb(0, 0, 0));
+    al_flip_display();
+    al_draw_textf(font_nivel, al_map_rgb(255, 255, 255), 300, 150, ALLEGRO_ALIGN_CENTER, "SCORE  %d",puntaje);
+    al_draw_text(font_nivel, al_map_rgb(0, 0, 255), FONT_NIVEL_X-5, FONT_NIVEL_Y+5 , ALLEGRO_ALIGN_CENTER, "GAME OVER");
+    al_draw_text(font_nivel, al_map_rgb(255, 0, 0), FONT_NIVEL_X, FONT_NIVEL_Y , ALLEGRO_ALIGN_CENTER, "GAME OVER");
+    al_draw_text(font_nivel, al_map_rgb(255, 255, 255), FONT_NIVEL_X+5 , FONT_NIVEL_Y-5 , ALLEGRO_ALIGN_CENTER, "GAME OVER");
+    al_flip_display();
+    al_rest(2.5); 
 }
 
 void destroy_allegro (void){

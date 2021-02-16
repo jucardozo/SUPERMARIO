@@ -4,13 +4,6 @@
  * and open the template in the editor.
  */
 
-/* 
- * File:   allegro.h
- * Author: jucardozo
- *
- * Created on February 15, 2021, 10:07 AM
- */
-
 #ifndef ALLEGRO_H
 #define ALLEGRO_H
 
@@ -49,6 +42,9 @@ extern "C" {
 #define VIDA_1_X 500.0
 #define VIDA_2_X 540.0
 #define VIDA_3_X 580.0
+    
+#define FONT_NIVEL_X 325
+#define FONT_NIVEL_Y 250
 
     
     
@@ -57,12 +53,17 @@ int inicializacion();
 void draw_background (int,int);
 void * entrad_allegro();    /*recibe por comando el movimiento deseado por el jugador*/
 void print_map_allegro(int arr [ALTURA][LARGO]);
+void print_lvl (int nivel);
 void print_vida (void);
+int menu_allegro(int punt, int niv,int vid);
+void print_gameover(int puntaje);
 void destroy_allegro (void);
 
 
 
 ALLEGRO_FONT *font;
+ALLEGRO_FONT *font_nivel;
+ALLEGRO_FONT *font_pausa;
 ALLEGRO_BITMAP *mar;                         //que nos permitiran utilizar ciertas funciones de
 ALLEGRO_BITMAP *agua;                           //allegro.
 ALLEGRO_BITMAP *alga; 

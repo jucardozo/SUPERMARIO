@@ -4,13 +4,6 @@
  * and open the template in the editor.
  */
 
-/* 
- * File:   levels.h
- * Author: jucardozo
- *
- * Created on 28 de enero de 2021, 09:58
- */
-
 #ifndef LEVELS_H
 #define LEVELS_H
 

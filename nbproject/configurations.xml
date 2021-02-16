@@ -6,6 +6,7 @@
                    projectFiles="true">
       <itemPath>allegro.h</itemPath>
       <itemPath>levels.h</itemPath>
+      <itemPath>motor.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -14,9 +15,9 @@
       <itemPath>alga.png</itemPath>
       <itemPath>bloque.png</itemPath>
       <itemPath>final.png</itemPath>
-      <itemPath>../../Descargas/letritas.ttf</itemPath>
+      <itemPath>letritas.ttf</itemPath>
       <itemPath>lobby.jpg</itemPath>
-      <itemPath>../../Descargas/mar.png</itemPath>
+      <itemPath>mar.png</itemPath>
       <itemPath>mario_adelante.png</itemPath>
       <itemPath>mario_atras.png</itemPath>
       <itemPath>moneda.png</itemPath>
@@ -26,8 +27,8 @@
       <itemPath>pez.png</itemPath>
       <itemPath>press_start.jpg</itemPath>
       <itemPath>pulpo.png</itemPath>
-      <itemPath>../../Descargas/vida.jpeg</itemPath>
-      <itemPath>../../Descargas/vida_perdida.jpeg</itemPath>
+      <itemPath>vida.jpeg</itemPath>
+      <itemPath>vida_perdida.jpeg</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
@@ -35,6 +36,7 @@
       <itemPath>allegro.c</itemPath>
       <itemPath>levels.c</itemPath>
       <itemPath>main.c</itemPath>
+      <itemPath>motor.c</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -77,14 +79,6 @@
           </linkerLibItems>
         </linkerTool>
       </compileType>
-      <item path="../../Descargas/letritas.ttf" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../../Descargas/mar.png" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../../Descargas/vida.jpeg" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../../Descargas/vida_perdida.jpeg" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="agua.png" ex="false" tool="3" flavor2="0">
       </item>
       <item path="alga.png" ex="false" tool="3" flavor2="0">
@@ -97,6 +91,8 @@
       </item>
       <item path="final.png" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="letritas.ttf" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="levels.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="levels.h" ex="false" tool="3" flavor2="0">
@@ -105,11 +101,17 @@
       </item>
       <item path="main.c" ex="false" tool="0" flavor2="0">
       </item>
+      <item path="mar.png" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="mario_adelante.png" ex="false" tool="3" flavor2="0">
       </item>
       <item path="mario_atras.png" ex="false" tool="3" flavor2="0">
       </item>
       <item path="moneda.png" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="motor.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="motor.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="musica.wav" ex="false" tool="3" flavor2="0">
       </item>
@@ -122,6 +124,10 @@
       <item path="press_start.jpg" ex="false" tool="3" flavor2="0">
       </item>
       <item path="pulpo.png" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="vida.jpeg" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="vida_perdida.jpeg" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
     <conf name="Release" type="1">
@@ -144,14 +150,6 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
-      <item path="../../Descargas/letritas.ttf" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../../Descargas/mar.png" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../../Descargas/vida.jpeg" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../../Descargas/vida_perdida.jpeg" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="agua.png" ex="false" tool="3" flavor2="0">
       </item>
       <item path="alga.png" ex="false" tool="3" flavor2="0">
@@ -164,6 +162,8 @@
       </item>
       <item path="final.png" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="letritas.ttf" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="levels.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="levels.h" ex="false" tool="3" flavor2="0">
@@ -172,11 +172,17 @@
       </item>
       <item path="main.c" ex="false" tool="0" flavor2="0">
       </item>
+      <item path="mar.png" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="mario_adelante.png" ex="false" tool="3" flavor2="0">
       </item>
       <item path="mario_atras.png" ex="false" tool="3" flavor2="0">
       </item>
       <item path="moneda.png" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="motor.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="motor.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="musica.wav" ex="false" tool="3" flavor2="0">
       </item>
@@ -189,6 +195,10 @@
       <item path="press_start.jpg" ex="false" tool="3" flavor2="0">
       </item>
       <item path="pulpo.png" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="vida.jpeg" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="vida_perdida.jpeg" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>
