@@ -7,7 +7,6 @@
       <itemPath>allegro.h</itemPath>
       <itemPath>levels.h</itemPath>
       <itemPath>motor.h</itemPath>
-      <itemPath>rspi.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -39,7 +38,6 @@
       <itemPath>levels.c</itemPath>
       <itemPath>main.c</itemPath>
       <itemPath>motor.c</itemPath>
-      <itemPath>rspi.c</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -130,10 +128,6 @@
       </item>
       <item path="pulpo.png" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="rspi.c" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="rspi.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="vida.jpeg" ex="false" tool="3" flavor2="0">
       </item>
       <item path="vida_perdida.jpeg" ex="false" tool="3" flavor2="0">
@@ -206,10 +200,6 @@
       <item path="press_start.jpg" ex="false" tool="3" flavor2="0">
       </item>
       <item path="pulpo.png" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="rspi.c" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="rspi.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="vida.jpeg" ex="false" tool="3" flavor2="0">
       </item>

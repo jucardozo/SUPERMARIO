@@ -38,8 +38,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/allegro.o \
 	${OBJECTDIR}/levels.o \
 	${OBJECTDIR}/main.o \
-	${OBJECTDIR}/motor.o \
-	${OBJECTDIR}/rspi.o
+	${OBJECTDIR}/motor.o
 
 
 # C Compiler Flags
@@ -85,11 +84,6 @@ ${OBJECTDIR}/motor.o: motor.c
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/motor.o motor.c
-
-${OBJECTDIR}/rspi.o: rspi.c
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.c) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/rspi.o rspi.c
 
 # Subprojects
 .build-subprojects:

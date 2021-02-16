@@ -10,6 +10,10 @@
  *
  * Created on January 14, 2021, 4:23 PM
  */
+/*DEFINES PARA EL HARDWARE*/
+//buscan ser usadas como instrucciones para el precompilador
+//#define RASPI
+#define PC      //si estamos usando la libreria de allegro
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -18,12 +22,12 @@
 #include <unistd.h>
 #include "levels.h"  
 #include "motor.h" 
+#ifdef PC
 #include "allegro.h"
+#endif
+#ifdef RASPI
 #include "rspi.h"
-#include <allegro5/allegro5.h>
-#include <allegro5/allegro_image.h>
-#include <allegro5/allegro_audio.h> // NO OLVIDAR AGREGAR EN EL LINKER DEL PROYECTO
-#include <allegro5/allegro_acodec.h> // NO OLVIDAR AGREGAR EN EL LINKER DEL PROYECTO*/
+#endif
 
 /*DEFINE PARA EL USO DEL JUEGO*/
 
@@ -34,10 +38,7 @@
 #define pausa 104
 #define salir 105
 
-/*DEFINES PARA EL HARDWARE*/
-//buscan ser usadas como instrucciones para el precompilador
-#define RASPI
-//#define PC      //si estamos usando la libreria de allegro
+
 
 
 /*Globales*/
