@@ -26,6 +26,7 @@ ALLEGRO_EVENT_QUEUE *event_queue = NULL;        //Cola de eventos*/
 
 extern int tecla;
 extern int pos[3];
+extern int vida;
 
 
 int inicializacion(){
@@ -77,6 +78,20 @@ int inicializacion(){
     }
     else if (!(agua = al_load_bitmap("agua.png"))) {           //se carga imagen de agua
         fprintf(stderr, "Unable to load agua\n");
+        al_uninstall_system();
+        al_shutdown_image_addon();
+        al_destroy_display(display);
+        return -1;
+    }
+    else if (!(vidas = al_load_bitmap("vida.jpeg"))) {           //se carga imagen de vidas
+        fprintf(stderr, "Unable to load vidas\n");
+        al_uninstall_system();
+        al_shutdown_image_addon();
+        al_destroy_display(display);
+        return -1;
+    }
+    else if (!(vida_perdida = al_load_bitmap("vida_perdida.jpeg"))) {           //se carga imagen de vidas_perdida
+        fprintf(stderr, "Unable to load vida_perdidas\n");
         al_uninstall_system();
         al_shutdown_image_addon();
         al_destroy_display(display);
@@ -453,24 +468,61 @@ void print_map_allegro(int arr [ALTURA][LARGO]){
   
  }
 
-void draw_background (int puntaje){
+void draw_background (int puntaje, int nivel){
     al_draw_scaled_bitmap(mar,0, 0, al_get_bitmap_width(mar), al_get_bitmap_height(mar),0, 0, LARGO_DISPLAY, ANCHO_DISPLAY,0);      //CARGO BACKGROUND Y LO MUESTRO
     al_draw_text(font, al_map_rgb(255, 255, 255), PUNTAJE_X , VISTA_Y , ALLEGRO_ALIGN_CENTER, "PUNTAJE:");
     al_draw_textf(font, al_map_rgb(255, 255, 255), PUNTAJE_NUMERO_X , VISTA_Y , ALLEGRO_ALIGN_CENTER, "%d",puntaje);
     al_draw_text(font, al_map_rgb(255, 255, 255), NIVEL_X , VISTA_Y , ALLEGRO_ALIGN_CENTER, "NIVEL:");
-    al_draw_text(font, al_map_rgb(255, 255, 255), NIVEL_NUMERO_X , VISTA_Y , ALLEGRO_ALIGN_CENTER, "1");
+    al_draw_textf(font, al_map_rgb(255, 255, 255), NIVEL_NUMERO_X , VISTA_Y , ALLEGRO_ALIGN_CENTER, "%d",nivel);
     al_draw_text(font, al_map_rgb(255, 255, 255), VIDA_X , VISTA_Y , ALLEGRO_ALIGN_CENTER, "VIDA:");
-    al_flip_display();
+    
+    if(vida==3){
+        al_draw_bitmap(vidas,VIDA_1_X,VISTA_Y,0);
+        al_draw_bitmap(vidas,VIDA_2_X,VISTA_Y,0);
+        al_draw_bitmap(vidas,VIDA_3_X,VISTA_Y,0);
+    }
+    else if(vida==2){
+        al_draw_bitmap(vidas,VIDA_1_X,VISTA_Y,0);
+        al_draw_bitmap(vidas,VIDA_2_X,VISTA_Y,0); 
+        al_draw_bitmap(vida_perdida,VIDA_3_X,VISTA_Y,0);        
+    }
+    else if(vida==1){
+        al_draw_bitmap(vidas,VIDA_1_X,VISTA_Y,0); 
+        al_draw_bitmap(vida_perdida,VIDA_2_X,VISTA_Y,0); 
+        al_draw_bitmap(vida_perdida,VIDA_3_X,VISTA_Y,0);
+    }
+    else if(vida==0){
+        al_draw_bitmap(vida_perdida,VIDA_1_X,VISTA_Y,0); 
+        al_draw_bitmap(vida_perdida,VIDA_2_X,VISTA_Y,0); 
+        al_draw_bitmap(vida_perdida,VIDA_3_X,VISTA_Y,0);
+    }
 }
 
 
+void print_vida (void){
+    if(vida==2){
+        al_draw_bitmap(vidas,VIDA_1_X,VISTA_Y,0);
+        al_draw_bitmap(vidas,VIDA_2_X,VISTA_Y,0); 
+        al_draw_bitmap(vida_perdida,VIDA_3_X,VISTA_Y,0);        
+    }
+    else if(vida==1){
+        al_draw_bitmap(vidas,VIDA_1_X,VISTA_Y,0); 
+        al_draw_bitmap(vida_perdida,VIDA_2_X,VISTA_Y,0); 
+        al_draw_bitmap(vida_perdida,VIDA_3_X,VISTA_Y,0);
+    }
+}
+
 void destroy_allegro (void){
+    printf("\n");
+    printf("cerrando allegro...\n");
     al_destroy_display(display);                //se libera la memoria dinamica , destruyendo los elemntos usados
     al_destroy_bitmap(nintendo);
     al_destroy_bitmap(lobby);
     al_destroy_bitmap(press_start);
     al_destroy_bitmap(mar);
     al_destroy_bitmap(agua);
+    al_destroy_bitmap(vidas);
+    al_destroy_bitmap(vida_perdida);
     al_destroy_bitmap(alga);
     al_destroy_bitmap(bloque);
     al_destroy_bitmap(mario_adelante);

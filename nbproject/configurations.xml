@@ -26,6 +26,8 @@
       <itemPath>pez.png</itemPath>
       <itemPath>press_start.jpg</itemPath>
       <itemPath>pulpo.png</itemPath>
+      <itemPath>../../Descargas/vida.jpeg</itemPath>
+      <itemPath>../../Descargas/vida_perdida.jpeg</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
@@ -78,6 +80,10 @@
       <item path="../../Descargas/letritas.ttf" ex="false" tool="3" flavor2="0">
       </item>
       <item path="../../Descargas/mar.png" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../Descargas/vida.jpeg" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../Descargas/vida_perdida.jpeg" ex="false" tool="3" flavor2="0">
       </item>
       <item path="agua.png" ex="false" tool="3" flavor2="0">
       </item>
@@ -141,6 +147,10 @@
       <item path="../../Descargas/letritas.ttf" ex="false" tool="3" flavor2="0">
       </item>
       <item path="../../Descargas/mar.png" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../Descargas/vida.jpeg" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../Descargas/vida_perdida.jpeg" ex="false" tool="3" flavor2="0">
       </item>
       <item path="agua.png" ex="false" tool="3" flavor2="0">
       </item>

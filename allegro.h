@@ -46,22 +46,31 @@ extern "C" {
 #define VIDA_X 450.0
 #define VISTA_Y 10.0
     
+#define VIDA_1_X 500.0
+#define VIDA_2_X 540.0
+#define VIDA_3_X 580.0
+
+    
     
 int bienvenida_allegro(void);
 int inicializacion();
-void draw_background (int puntaje);
+void draw_background (int,int);
 void * entrad_allegro();    /*recibe por comando el movimiento deseado por el jugador*/
 void print_map_allegro(int arr [ALTURA][LARGO]);
+void print_vida (void);
 void destroy_allegro (void);
 
 
-ALLEGRO_FONT * font;
+
+ALLEGRO_FONT *font;
 ALLEGRO_BITMAP *mar;                         //que nos permitiran utilizar ciertas funciones de
 ALLEGRO_BITMAP *agua;                           //allegro.
 ALLEGRO_BITMAP *alga; 
 ALLEGRO_BITMAP *lobby;
 ALLEGRO_BITMAP *nintendo;
 ALLEGRO_BITMAP *press_start;
+ALLEGRO_BITMAP *vidas;
+ALLEGRO_BITMAP *vida_perdida;
 ALLEGRO_BITMAP *bloque;
 ALLEGRO_BITMAP *mario_adelante;
 ALLEGRO_BITMAP *mario_atras;                         

@@ -1,4 +1,4 @@
-  /*
+   /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -18,7 +18,7 @@
 #include <unistd.h>
 #include "levels.h"         
 #include "allegro.h"
-/*#include <allegro5/allegro5.h>
+#include <allegro5/allegro5.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_audio.h> // NO OLVIDAR AGREGAR EN EL LINKER DEL PROYECTO
 #include <allegro5/allegro_acodec.h> // NO OLVIDAR AGREGAR EN EL LINKER DEL PROYECTO*/
@@ -110,7 +110,7 @@ int main() {
                     pos[1]=0;
                     pos[2]=0;
 #ifdef PC
-                    draw_background (puntaje);
+                    draw_background (puntaje,nivel);
                     al_flip_display();                                        
                     print_map_allegro(*niveles[0]);
 #endif   
@@ -125,7 +125,7 @@ int main() {
                     pos[1]=0;
                     pos[2]=0;
 #ifdef PC
-                    draw_background (puntaje);
+                    draw_background (puntaje,nivel);
                     al_flip_display();              
                     print_map_allegro(*niveles[1]);
 #endif
@@ -141,7 +141,7 @@ int main() {
                     pos[1]=0;
                     pos[2]=0;
 #ifdef PC
-                    draw_background (puntaje);
+                    draw_background (puntaje,nivel);
                     al_flip_display();                   
                     print_map_allegro(*niveles[2]);
 #endif
@@ -187,11 +187,9 @@ int main() {
                     puntaje+=10;
                     printf("PUNTAJE:%d\n",puntaje);
                     movimiento(*niveles[i],boton);                    
-#ifdef PC
+#ifdef PC            
+                    draw_background(puntaje,nivel);
                     print_map_allegro(*niveles[i]);
-                    draw_background (puntaje);
-                    al_flip_display();
-                    
 #endif
 #ifdef RASPI
                  printmat(*niveles[i]);   
@@ -206,9 +204,9 @@ int main() {
                     tecla=0;
                     nivel+=1;
                     fin=0;
-#ifdef PC
-                     draw_background (puntaje);
-                     al_flip_display(); 
+#ifdef PC            
+                    draw_background(puntaje,nivel);
+                    al_flip_display();
 #endif
                 }
                 else if(val==3){
@@ -222,8 +220,13 @@ int main() {
                         
                     }
                     else
-                    {
+                    {           
+#ifdef RASPI
                         printf("Perdiste una vida, te quedan: %d\n",vida);
+#endif
+#ifdef PC
+                        print_vida();
+#endif
                         tecla=0;
                     }
                 }
@@ -233,12 +236,12 @@ int main() {
             else{           //si no se detecto niguna entra por el teclado,acrualiza pantalla       
 
                 print_map_allegro(*niveles[i]);
+                print_vida();
             }
  #endif         
         }
         
     }
-    printf("cerrando allegro\n");
     stop=pausa;
     
 #ifdef PC
@@ -546,7 +549,7 @@ void * enemigo_pez(){           //este thread controla los movimientos del pez q
         int valor1 [MAX_ENEM];		//arreglo que guardo las posiciones de los peZes
         int valor2 [MAX_ENEM];		//arreglo que salvo las posiciones de los peZes
 
-        if(nivel == 1){                     //cantidad de enemigos PEZ por nivel
+        if(nivel == 1){                     //cantidad de enemigos PEZ por nivel y hasta donde llegan en el arreglo de punteros
             i=0;
             hasta=3;
         }
@@ -559,12 +562,12 @@ void * enemigo_pez(){           //este thread controla los movimientos del pez q
             hasta=18;
         }
 
-        while ((pez) && (nivel_var==nivel)){                
+        while ((pez) && (nivel_var==nivel)){                //hasta que no hayan peZes o hasta que cambie de nivel      
             while (stop){               //para la pausa
             }
 
             if(cant_pez == 0){
-
+                                        //que pare si no hay mas peZes
                 pez = 0;
             }
 
@@ -585,9 +588,11 @@ void * enemigo_pez(){           //este thread controla los movimientos del pez q
                 if(q<cant_pez){								//SI SE MUEVE POR PRIMERA VEZ
                     while (i < hasta){		            
                         valor1[i] = *(pezes[i]-1);               //guardo el valor para salvar lo que valia antes de que caiga el pez               
-                        if(valor1[i]==1){       
+                        if(valor1[i]==MARIO){       
                             vida-=1;
+#ifdef RASPI
                             printf("Perdiste una vida , te quedan:%d\n",vida);
+#endif
                         }        
                                 //aca ya salve el valor de lo que habia y se guarda en valor
 
@@ -598,21 +603,30 @@ void * enemigo_pez(){           //este thread controla los movimientos del pez q
                         pezes [i] -= 1;					//la nueva direeccion del pez es la de la izquuierda
                         i++;
                     }
-                    sleep(1.0);
+                    sleep(1.0);             //velocidad de los peZes
                 }			
                 else{
                     while (i < hasta){		        
-                        valor2[i] = *(pezes[i]-1);               //guardo el valor para salvar lo que valia antes de que caiga el pez		        
+                        valor2[i] = *(pezes[i]-1);               //guardo el valor para salvar lo que valia antes de que caiga el pez	
+                        if(valor2[i]==MARIO){       
+                            vida-=1;
+#ifdef RASPI
+                            printf("Perdiste una vida , te quedan:%d\n",vida);
+#endif
+                        }     
                                     //aca ya salve el valor de lo que habia y se guarda en valor
                         *(pezes[i]-1) = PEZ;            //muevo el PEZ para la izquierda	
                         * pezes [i] = valor1[i];        //salvo lo que habia antes	       
 
 
                         pezes [i] -= 1;					//la nueva direeccion del pez es la de la izquuierda
+                        if ((valor2[i] == MARIO) || (valor2[i] == PULPO) || (valor2[i] == PES) || (valor2[i] == PEZ)){
+                            valor2[i] = AGUA;                              //si justo hay otra cos, que me ponga agua
+                        }
                         valor1 [i]= valor2[i];			//pongo en valor 1 lo que esta valor 2  asi ya se vuelve a poner otra vez
                         i++;                            //todo es para que avance un pez, aumento i para que vaya al otro pez
                     }
-                    sleep(1.0);
+                    sleep(1.0);             //velocidades de los peZes
                 }
 
             }		
@@ -628,7 +642,7 @@ void * enemigo_pez(){           //este thread controla los movimientos del pez q
             }
 
         }  
-        while(nivel_var == nivel){
+        while(nivel_var == nivel){          //esto esta si ya no quedaron peces, el thread vuelve a arrancar cuando cambia de nivel
             
         }
 
@@ -638,7 +652,7 @@ void * enemigo_pez(){           //este thread controla los movimientos del pez q
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void * enemigo_pes(){           //este thread controla los movimientos del pes que va mas lento en el mapa
-        while(1){
+    while(1){
         int pes = 1;                //variable que uso para el while
 
         int *peses [MAX_ENEM];             //creo arreglo de punteros para guardar las posiciones de los peces  
@@ -675,7 +689,7 @@ void * enemigo_pes(){           //este thread controla los movimientos del pes q
         int valor1 [MAX_ENEM];		//arreglo que guardo las posiciones de los peSes
         int valor2 [MAX_ENEM];		//arreglo que salvo las posiciones de los peSes
 
-        if(nivel == 1){                     //cantidad de enemigos PES por nivel
+        if(nivel == 1){                     //cantidad de enemigos PEZ por nivel y hasta donde llegan en el arreglo de punteros
             i=0;
             hasta=3;
         }
@@ -688,13 +702,13 @@ void * enemigo_pes(){           //este thread controla los movimientos del pes q
             hasta=18;
         }
 
-        while ((pes) && (nivel_var==nivel)){                
+        while ((pes) && (nivel_var==nivel)){                //hasta que no hayan peZes o hasta que cambie de nivel 
             while (stop){               //para la pausa
             }
 
             if(cant_pes == 0){
 
-                pes = 0;
+                pes = 0;                    //que pare si no hay mas peSes
             }
 
             else if (  (  ( peses[i] - (dir_niveles[nivel-1]) )    % LARGO  )  == 0){         //si esta en la columna 0, entonces listo el PES
@@ -714,9 +728,11 @@ void * enemigo_pes(){           //este thread controla los movimientos del pes q
                 if(q<cant_pes){								//SI SE MUEVE POR PRIMERA VEZ
                     while (i < hasta){		            
                         valor1[i] = *(peses[i]-1);               //guardo el valor para salvar lo que valia antes de que caiga el pes               
-                        if(valor1[i]==1){       
+                        if(valor1[i]==MARIO){       
                             vida-=1;
+#ifdef RASPI
                             printf("Perdiste una vida , te quedan:%d\n",vida);
+#endif
                         }        
                                 //aca ya salve el valor de lo que habia y se guarda en valor
 
@@ -727,21 +743,29 @@ void * enemigo_pes(){           //este thread controla los movimientos del pes q
                         peses [i] -= 1;					//la nueva direeccion del pes es la de la izquuierda
                         i++;
                     }
-                    sleep(2.0);
+                    sleep(2.0);                 //velocidad de los peSes
                 }			
                 else{
                     while (i < hasta){		        
-                        valor2[i] = *(peses[i]-1);               //guardo el valor para salvar lo que valia antes de que caiga el pes		        
+                        valor2[i] = *(peses[i]-1);               //guardo el valor para salvar lo que valia antes de que caiga el pes	
+                        if(valor2[i]==MARIO){       
+                            vida-=1;
+#ifdef RASPI
+                            printf("Perdiste una vida , te quedan:%d\n",vida);
+#endif
+                        } 
                                     //aca ya salve el valor de lo que habia y se guarda en valor
                         *(peses[i]-1) = PES;            //muevo el PES para la izquierda	
                         * peses [i] = valor1[i];        //salvo lo que habia antes	       
 
-
-                        peses [i] -= 1;					//la nueva direeccion del pes es la de la izquuierda
+                        peses [i] -= 1;	
+                        if ((valor2[i] == MARIO) || (valor2[i] == PULPO) || (valor2[i] == PES) || (valor2[i] == PEZ)){
+                            valor2[i] = AGUA;                              //si justo hay otra cos, que me ponga agua
+                        }                               //la nueva direeccion del pes es la de la izquuierda
                         valor1 [i]= valor2[i];			//pongo en valor 1 lo que esta valor 2  asi ya se vuelve a poner otra vez
                         i++;                            //todo es para que avance un pes, aumento i para que vaya al otro pes
                     }
-                    sleep(2.0);
+                    sleep(2.0);         //velocidad de los peSes
                 }
 
             }		
@@ -817,12 +841,18 @@ void * enemigo_pulpo(){             ////este thread controla los movimientos del
             hasta=18;
         }
 
-        while (nivel_var==nivel){
+        while (nivel_var==nivel){       //hasta que cambie de nivel, si cambia, vuelve a arrancar con nivel_var con otro numerp
             while (stop){               //para la pausa
             }
             if(q<cant_pulpo){
                 while(f<hasta){				
-                    valor5 [f]= *(pulpos[f]-LARGO);               //guardo el valor para salvar lo que valia antes de que caiga el pulpo				
+                    valor5 [f]= *(pulpos[f]-LARGO);               //guardo el valor para salvar lo que valia antes de que caiga el pulpo
+                    if(valor5[f]==MARIO){       
+                            vida-=1;
+#ifdef RASPI
+                            printf("Perdiste una vida , te quedan:%d\n",vida);
+#endif
+                        } 
                                     //aca ya salve el valor de lo que habia y se guarda en valor
                     *(pulpos[f]-LARGO) = PULPO;            //muevo el PULPO 
                     * pulpos[f] = AGUA;             //cuando se movio por primera vez, que me ponga agua donde arranco el PULPO			
@@ -830,21 +860,30 @@ void * enemigo_pulpo(){             ////este thread controla los movimientos del
                     pulpos [f] -= LARGO;					//la nueva direeccion del pulpo es la de una para arriba
                     f++;							//hasta el ultimpo pulpo, todos se mueven para arriba
                 }
-                sleep(2.5);
+                sleep(1.5);     //velocidad de los pulpos
             }	
             else{		
                 for(k=0;k<MOV_PULPO;k++){				//MOVIMIENTO DEL PULPO PARA ARRIBA
                     while(f<hasta){			
-                        valor6 [f]= *(pulpos[f]-LARGO);               //guardo el valor para salvar lo que valia antes de que caiga el pulpo		
+                        valor6 [f]= *(pulpos[f]-LARGO);               //guardo el valor para salvar lo que valia antes de que caiga el pulpo	
+                        if(valor6[f]==MARIO){       
+                            vida-=1;
+#ifdef RASPI
+                            printf("Perdiste una vida , te quedan:%d\n",vida);
+#endif
+                        } 
                                             //aca ya salve el valor de lo que habia y se guarda en valor
                         *(pulpos[f]-LARGO) = PULPO;            //muevo el PULPO 
                                                                    //aca entro cuando el PULPO ya se movio mas de una vez
                         * pulpos [f] = valor5[f];        //salvo lo que habia antes		
                         pulpos [f] -= LARGO;				//la nueva direeccion del pulpo es la de una para arriba
+                        if ((valor6[f] == MARIO) || (valor6[f] == PULPO) || (valor6[f] == PES) || (valor6[f] == PEZ)){
+                            valor6[f] = AGUA;
+                        }
                         valor5 [f]= valor6[f];				//pongo en valor 1 lo que esta valor 2  asi ya se vuelve a poner otra vez
                         f++;							//hasta el ultimpo pulpo, todos se mueven para arriba
                     }
-                    sleep(1.5);
+                    sleep(1.5);     //velocidad de los peSes
                     if(nivel_var == 1){                     //vuelvo a arrancar desde el primer pulpo
                         f=0;
                     }
@@ -857,16 +896,25 @@ void * enemigo_pulpo(){             ////este thread controla los movimientos del
                 }		
                 for(k=0;k<MOV_PULPO;k++){				//MOVIMIENTO DEL PULPO PARA ABAJO
                     while(f<hasta){					
-                        valor6 [f]= *(pulpos[f]+LARGO);               //guardo el valor para salvar lo que valia antes de que caiga el pulpo		
+                        valor6 [f]= *(pulpos[f]+LARGO);               //guardo el valor para salvar lo que valia antes de que caiga el pulpo
+                        if(valor6[f]==MARIO){       
+                            vida-=1;
+#ifdef RASPI
+                            printf("Perdiste una vida , te quedan:%d\n",vida);
+#endif
+                        } 
                                                                    //aca ya salve el valor de lo que habia y se guarda en valor
                         *(pulpos[f]+LARGO) = PULPO;            //muevo el PULPO 
                                                                 //aca entro cuando el PULPO ya se movio mas de una vez
                         * pulpos [f] = valor5[f];        //salvo lo que habia antes                                        
                         pulpos [f] += LARGO;				//la nueva direeccion del pulpo es la de una para abajo
+                        if ((valor6[f] == MARIO) || (valor6[f] == PULPO) || (valor6[f] == PES) || (valor6[f] == PEZ)){
+                            valor6[f] = AGUA;                              //si justo hay otra cos, que me ponga agua
+                        }
                         valor5 [f]= valor6[f];				//pongo en valor 1 lo que esta valor 2  asi ya se vuelve a poner otra vez
                         f++;							//hasta el ultimpo pulpo, todos se mueven para abajo
                     }
-                    sleep(1.5);
+                    sleep(1.5);     //velocidad de los peSes
                     if(nivel_var == 1){                     //vuelvo a arrancar desde el primer pulpo
                         f=0;
                     }
