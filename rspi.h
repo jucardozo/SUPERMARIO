@@ -17,8 +17,20 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+    
+#include "dsidrv.h"
+#include "joydrv.h"
+#include "libaudio.h"
 
+#define up 100
+#define right 101
+#define left 102
+#define down 103
+#define pausa 104
+#define salir 105
 
+int inicializacion(void);
+void entrada_rspi ();
 
 
 #ifdef __cplusplus

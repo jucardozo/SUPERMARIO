@@ -19,6 +19,7 @@
 #include "levels.h"  
 #include "motor.h" 
 #include "allegro.h"
+#include "rspi.h"
 #include <allegro5/allegro5.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_audio.h> // NO OLVIDAR AGREGAR EN EL LINKER DEL PROYECTO
@@ -35,8 +36,8 @@
 
 /*DEFINES PARA EL HARDWARE*/
 //buscan ser usadas como instrucciones para el precompilador
-//#define RASPI
-#define PC      //si estamos usando la libreria de allegro
+#define RASPI
+//#define PC      //si estamos usando la libreria de allegro
 
 
 /*Globales*/
@@ -75,8 +76,12 @@ int main() {
 #endif
     
 #ifdef RASPI
-    //alguna inicializacion
-     pthread_create(&th1,NULL,entrad,NULL);  
+    int init_correct=inicializacion();
+    if(init_correct==-1){
+        printf("fallo en la inicializacion de la raspi\n");
+        vida=0;
+    }
+    pthread_create(&th1,NULL,entrada_rspi,NULL);  
 #endif
      
     niveles[0]=&lvl_1;
@@ -90,10 +95,7 @@ int main() {
     
     while(vida>0){
         switch(nivel){          //habilita el control, automatico, de cada enemigo en cada nivel//
-            case 1 :
-#ifdef RASPI
-                    printf("**************NIVEL 1*****************\n");
-#endif
+            case 1 ://nivel 1
                     creacionmap(nivel);
                     pos[0]=0;
                     pos[1]=0;
@@ -105,13 +107,11 @@ int main() {
                     print_map_allegro(*niveles[0]);
 #endif   
 #ifdef RASPI
+                    printf("**************NIVEL 1*****************\n");
                     printmat(*niveles[0]);  //imprime el nivel
 #endif
                     i=0;fin=1; break;
-            case 2 :
-#ifdef RASPI
-                    printf("**************NIVEL 2*****************\n");
-#endif
+            case 2 ://nivel 2
                     creacionmap(nivel);
                     pos[0]=0;
                     pos[1]=0;
@@ -123,14 +123,12 @@ int main() {
                     print_map_allegro(*niveles[1]);
 #endif
 #ifdef RASPI
+                  printf("**************NIVEL 2*****************\n");
                   printmat(*niveles[1]);  
 #endif
                     
                     i=1;fin=1;boton=0;break;
-            case 3 :
-#ifdef RASPI
-                    printf("**************NIVEL 3*****************\n");
-#endif
+            case 3 ://nivel 3
                     creacionmap(nivel);
                     pos[0]=0;
                     pos[1]=0;
@@ -142,6 +140,7 @@ int main() {
                     print_map_allegro(*niveles[2]);
 #endif
 #ifdef RASPI
+                    printf("**************NIVEL 3*****************\n");
                     printmat(*niveles[2]);  //
 #endif
                     boton=0;i=2;fin=1;break;
