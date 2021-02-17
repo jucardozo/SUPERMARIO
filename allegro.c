@@ -14,14 +14,15 @@ ALLEGRO_SAMPLE *music = NULL;                  //Musica
 ALLEGRO_TIMER *timer = NULL;
 ALLEGRO_EVENT_QUEUE *event_queue = NULL;        //Cola de eventos*/
 
-extern int tecla;
+extern int tecla;           //variables que necesito de main.c para algunas funciones
 extern int pos[3];
 extern int vida;
 extern int fin;
 extern int stop;
 
+int right_or_left = RIGHT;              //variable que me dice si lla ultima que se apreto fue derecha o izquierda
 
-int inicializacion(){
+int inicializacion(){                                       //funcion que inicializa todo lo que es arreglo
     
 /*ALLEGROOOOOOO*/
     /*INICIALIZACION DE ALLEGRO*/
@@ -164,25 +165,25 @@ int inicializacion(){
     al_init_font_addon(); // initialize the font addon
     al_init_ttf_addon(); // initialize the ttf (True Type Font) addon
     
-    font = al_load_ttf_font("letritas.ttf", 36, 0); //HAY CREAR UN FONT PARA CADA TAMAÑO DE LETRA 
-    font_nivel = al_load_ttf_font("letritas.ttf", 100, 0); //HAY CREAR UN FONT PARA CADA TAMAÑO DE LETRA 
-    font_pausa = al_load_ttf_font("letritas.ttf", 36, 0); //HAY CREAR UN FONT PARA CADA TAMAÑO DE LETRA
+    font = al_load_ttf_font("letritas.ttf", 36, 0); //FUENTE PARA LA INFO DE ARRIBA 
+    font_nivel = al_load_ttf_font("letritas.ttf", 100, 0); //FUENTE PARA EL NIVEL Y PARA EL GAMEOVER
+    font_pausa = al_load_ttf_font("letritas.ttf", 36, 0); //FUENTE PARA LA PAUSA
     
     if (!font) {
-        fprintf(stderr, "Could not load 'letritas.ttf'.\n");
+        fprintf(stderr, "Could not load 'letritas.ttf'.\n");             //se carga la fuente font
         return -1;
     }
     if (!font_nivel) {
-        fprintf(stderr, "Could not load 'letritas.ttf'.\n");
+        fprintf(stderr, "Could not load 'letritas.ttf'.\n");             //se carga la fuente font_nivel
         return -1;
     }
     if (!font_pausa) {
-        fprintf(stderr, "Could not load 'letritas.ttf'.\n");
+        fprintf(stderr, "Could not load 'letritas.ttf'.\n");             //se carga la fuente font_pausa
         return -1;
     }
     
     /*INICIALIZACION TIMER*/
-    timer = al_create_timer(1.0 / FPS); //crea el timer pero NO empieza a correr
+    timer = al_create_timer(1.0 / FPS); 
     if (!timer) {
         fprintf(stderr, "failed to create timer!\n");
         return -1;
@@ -258,11 +259,11 @@ int inicializacion(){
 
 
 
-void *entrad_allegro(){
+void *entrad_allegro(){             //thread que recibe por comando el movimiento deseado por el jugador
     enum MYKEYS {
     KEY_W, KEY_S, KEY_A, KEY_D,ESC,ENTER,ESPACIO //enumero mis letras oa q quede mas fachero el arrgelo
     };
-    bool key_pressed[5] = {false, false, false, false,false}; //Estado de teclas, true cuando esta apretada
+    int key_pressed[5] = {FALSE, FALSE, FALSE, FALSE,FALSE}; //Estado de teclas, true cuando esta apretada
     while(1){
         
         ALLEGRO_EVENT ev;
@@ -271,31 +272,33 @@ void *entrad_allegro(){
                     switch (ev.keyboard.keycode) {         //en el caso de que lo haya marca como true, la presionada
                         case ALLEGRO_KEY_W:
                         case ALLEGRO_KEY_UP:
-                            key_pressed[KEY_W] = true;
-                            tecla=up;
+                            key_pressed[KEY_W] = TRUE;
+                            tecla=UP;
                             break;
 
                         case ALLEGRO_KEY_S:
                         case ALLEGRO_KEY_DOWN:
-                            key_pressed[KEY_S] = true;
-                            tecla=down;
+                            key_pressed[KEY_S] = TRUE;
+                            tecla=DOWN;
                             break;
 
                         case ALLEGRO_KEY_A:
                         case ALLEGRO_KEY_LEFT:
-                            key_pressed[KEY_A] = true;
-                            tecla=left;
+                            key_pressed[KEY_A] = TRUE;
+                            tecla=LEFT;
+                            right_or_left = LEFT;
                             break;
 
                         case ALLEGRO_KEY_D:
                         case ALLEGRO_KEY_RIGHT:
-                            key_pressed[KEY_D] = true;
-                            tecla=right;
+                            key_pressed[KEY_D] = TRUE;
+                            tecla=RIGHT;
+                            right_or_left = RIGHT;
                             break;
                             
                         case ALLEGRO_KEY_ESCAPE:
-                            key_pressed[ESC]=true;
-                            tecla=pausa;
+                            key_pressed[ESC]=TRUE;
+                            tecla=PAUSA;
                             break;
                     }
                 }
@@ -303,31 +306,31 @@ void *entrad_allegro(){
                     switch (ev.keyboard.keycode) {
                         case ALLEGRO_KEY_W:
                         case ALLEGRO_KEY_UP:
-                            key_pressed[KEY_W] = false;
+                            key_pressed[KEY_W] = FALSE;
                             break;
 
                         case ALLEGRO_KEY_S:
                         case ALLEGRO_KEY_DOWN:
-                            key_pressed[KEY_S] = false;
+                            key_pressed[KEY_S] = FALSE;
                             break;
 
                         case ALLEGRO_KEY_A:
                         case ALLEGRO_KEY_LEFT:
-                            key_pressed[KEY_A] = false;
+                            key_pressed[KEY_A] = FALSE;
                             break;
 
                         case ALLEGRO_KEY_D:
                         case ALLEGRO_KEY_RIGHT:
-                            key_pressed[KEY_D] = false;
+                            key_pressed[KEY_D] = FALSE;
                             break;
 
                         case ALLEGRO_KEY_ESCAPE:
-                            key_pressed[ESC]=false;
+                            key_pressed[ESC]=FALSE;
                             break;
                     }
                 }
                 else if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE){            //Si se quiso cerrar el display                                                                     //
-                    tecla=salir;
+                    tecla=SALIR;
                     
                 }
 
@@ -336,7 +339,8 @@ void *entrad_allegro(){
 }
 
 //////////////////////////////////////////////////////////////////////////
-int bienvenida_allegro(void){
+
+int bienvenida_allegro(void){                   //funcion que imprime la bienvenida del programa y el menu principial, y esta hasta que se aprete el enter o el espacio, si se apreto la cruz, devuelve un -1, sino devuelve  un 0, no recibe nada y devuelve un int
     
     /*PANTALLA NINTENDO*/
     al_clear_to_color(al_map_rgb(255, 255, 255));
@@ -377,20 +381,21 @@ int bienvenida_allegro(void){
 }
 
 
-void print_map_allegro(int arr [ALTURA][LARGO]){
+void print_map_allegro(int arr [ALTURA][LARGO]){            //funcion que carga e imprime todo lo que son las imagenes del mapa, es decir agarra informacion del arreglo de cada nivel y depende de que numero sea, imprime la imagen correspondiente, ademas imprime un "16x16" en proporcion de pixeles, recibe el arrgelo del nivel que esta y no devuelve nada
     
 
-     float largo_elemento=0;
-     float alto_elemento=0;
+     float largo_elemento=0;            //variables que usamos para movernos por elementos, ya que la imagen se divide en 16x16 cuadrados de 40x34 pixeles
+     float alto_elemento=0;             //cada imagen es de 40x34 pixeles
  
     if(((16+pos[2])-pos[1])<=8){        //se lee la columna en donde esta mario y se mueve le mapa si esta en la mitad
         pos[2]+=4;                      //la cantidad de este movimineto se guarda en el tercer elemento del arreglo, se elije por default que se mueva de a 4
     }  
     if(pos[2]<56){
-        for (int i=0;i<16;i++){
-            for(int p=pos[2]; p<(16+pos[2]);p++){
+        for (int i=0;i<16;i++){                     //entramos en un for para leer por filas al arreglo
+            for(int p=pos[2]; p<(16+pos[2]);p++){   //entramos en un for para leer por columnas al arreglo
 
-                switch(arr[i][p]){
+                switch(arr[i][p]){                  //dependiendo de que numero sea, dibuja la respectiva imagen en cierto lugar
+                    case PRECIPICIO:
                     case AGUA:
                         al_draw_bitmap(agua,largo_elemento,alto_elemento,0);
                         break;
@@ -416,21 +421,26 @@ void print_map_allegro(int arr [ALTURA][LARGO]){
                         al_draw_bitmap(pulpo,largo_elemento,alto_elemento,0);
                         break;
                     case MARIO:
-                        al_draw_bitmap(mario_adelante,largo_elemento,alto_elemento,0);
+                        if(right_or_left == RIGHT){                                             //dependiendo cual tecla (derecha o izquierda) se apreto ultima, dibuja a mario para adelante o mario para atras
+                            al_draw_bitmap(mario_adelante,largo_elemento,alto_elemento,0);
+                        }
+                        else if(right_or_left == LEFT){
+                            al_draw_bitmap(mario_atras,largo_elemento,alto_elemento,0);
+                        }
                         break;
                     default:
                         break;
                 }
-                largo_elemento += LARGO_ELEMENTO;
+                largo_elemento += LARGO_ELEMENTO;           //cada vez que se mueve por columna, se mueve 40 pixeles, ya que es el largo de cada imagen
             }
-            largo_elemento = 0;
-            alto_elemento += ALTO_ELEMENTO;
+            largo_elemento = 0;                     //una vez que termina la fila, ponemos la variable en X en 0 para volver a arrancar
+            alto_elemento += ALTO_ELEMENTO;         //sumo 34 pixeles en Y ya que es el alto en pixeles de cada imagen
 
         }
      
-        al_flip_display();
+        al_flip_display();    //lo imprimo
     }
-    else{
+    else{                                               //LO MISMO QUE LO DE ARRIBA
         for (int i=0;i<16;i++){
             for(int p=54; p<(70);p++){
 
@@ -461,7 +471,12 @@ void print_map_allegro(int arr [ALTURA][LARGO]){
                         al_draw_bitmap(pulpo,largo_elemento,alto_elemento,0);
                         break;
                     case MARIO:
-                        al_draw_bitmap(mario_adelante,largo_elemento,alto_elemento,0);
+                        if(right_or_left == RIGHT){
+                            al_draw_bitmap(mario_adelante,largo_elemento,alto_elemento,0);
+                        }
+                        else if(right_or_left == LEFT){
+                            al_draw_bitmap(mario_atras,largo_elemento,alto_elemento,0);
+                        }
                         break;
                     default:
                         break;
@@ -477,52 +492,51 @@ void print_map_allegro(int arr [ALTURA][LARGO]){
   
  }
 
-void draw_background (int puntaje, int nivel){
+void draw_background (int puntaje, int nivel){              //funcion que carga el detras de escena del mario, es decir el mar con mas informacion, recibe el puntaje y el nivel y no devuelve nada
     
-    al_draw_scaled_bitmap(mar,0, 0, al_get_bitmap_width(mar), al_get_bitmap_height(mar),0, 0, LARGO_DISPLAY, ANCHO_DISPLAY,0);      //CARGO BACKGROUND Y LO MUESTRO
-    al_draw_text(font, al_map_rgb(255, 255, 255), PUNTAJE_X , VISTA_Y , ALLEGRO_ALIGN_CENTER, "PUNTAJE:");
-    al_draw_textf(font, al_map_rgb(255, 255, 255), PUNTAJE_NUMERO_X , VISTA_Y , ALLEGRO_ALIGN_CENTER, "%d",puntaje);
-    al_draw_text(font, al_map_rgb(255, 255, 255), NIVEL_X , VISTA_Y , ALLEGRO_ALIGN_CENTER, "NIVEL:");
+    al_draw_scaled_bitmap(mar,0, 0, al_get_bitmap_width(mar), al_get_bitmap_height(mar),0, 0, LARGO_DISPLAY, ANCHO_DISPLAY,0);      //CARGO BACKGROUND (el mar)
+    al_draw_text(font, al_map_rgb(255, 255, 255), PUNTAJE_X , VISTA_Y , ALLEGRO_ALIGN_CENTER, "PUNTAJE:");                  
+    al_draw_textf(font, al_map_rgb(255, 255, 255), PUNTAJE_NUMERO_X , VISTA_Y , ALLEGRO_ALIGN_CENTER, "%d",puntaje);                //cargo PUNTAJE: y el puntaje en el cielo
+    al_draw_text(font, al_map_rgb(255, 255, 255), NIVEL_X , VISTA_Y , ALLEGRO_ALIGN_CENTER, "NIVEL:");                              //cargo NIVEL: y el nivel en el cielo
     al_draw_textf(font, al_map_rgb(255, 255, 255), NIVEL_NUMERO_X , VISTA_Y , ALLEGRO_ALIGN_CENTER, "%d",nivel);
-    al_draw_text(font, al_map_rgb(255, 255, 255), VIDA_X , VISTA_Y , ALLEGRO_ALIGN_CENTER, "VIDA:");
-    
-    if(vida==3){
+    al_draw_text(font, al_map_rgb(255, 255, 255), VIDA_X , VISTA_Y , ALLEGRO_ALIGN_CENTER, "VIDA:");                                //cargo VIDA:
+    if(vida==3){                                    //si tiene tres vidas, cargo tres corazones
         al_draw_bitmap(vidas,VIDA_1_X,VISTA_Y,0);
         al_draw_bitmap(vidas,VIDA_2_X,VISTA_Y,0);
         al_draw_bitmap(vidas,VIDA_3_X,VISTA_Y,0);
     }
-    else if(vida==2){
+    else if(vida==2){                               //si tiene dos vidas, cargo dos corazones y uno roto
         al_draw_bitmap(vidas,VIDA_1_X,VISTA_Y,0);
         al_draw_bitmap(vidas,VIDA_2_X,VISTA_Y,0); 
         al_draw_bitmap(vida_perdida,VIDA_3_X,VISTA_Y,0);        
     }
-    else if(vida==1){
+    else if(vida==1){                               //si tiene una vida, cargo un corazon y dos rotos
         al_draw_bitmap(vidas,VIDA_1_X,VISTA_Y,0); 
         al_draw_bitmap(vida_perdida,VIDA_2_X,VISTA_Y,0); 
         al_draw_bitmap(vida_perdida,VIDA_3_X,VISTA_Y,0);
     }
-    else if(vida==0){
+    else if(vida==0){                               //si tiene cero vidas, cargo tres rotos
         al_draw_bitmap(vida_perdida,VIDA_1_X,VISTA_Y,0); 
         al_draw_bitmap(vida_perdida,VIDA_2_X,VISTA_Y,0); 
         al_draw_bitmap(vida_perdida,VIDA_3_X,VISTA_Y,0);
     }
 }
 
-int menu_allegro(int punt, int niv,int vid){
+int menu_allegro(int punt, int niv,int vid){            //funcion que imprime el menu de pausa, recibe el puntaje, el nivel y la vida y devuelve un 0
     
-    al_draw_bitmap(men_pausa,155,110,0);
+    al_draw_bitmap(men_pausa,MENU_X,MENU_Y,0);              //imprime una parte del lobby
     al_draw_text(font_pausa, al_map_rgb(255, 255, 255), FONT_NIVEL_X,FONT_NIVEL_Y+20, ALLEGRO_ALIGN_CENTER, "PRESIONE ESC PARA CONTINUAR");
     al_draw_text(font_pausa, al_map_rgb(255, 255, 255), FONT_NIVEL_X, FONT_NIVEL_Y+85, ALLEGRO_ALIGN_CENTER, "APRIETE LA X PARA CERRAR EL JUEGO");
-    al_flip_display();
+    al_flip_display();      //imprime PRESIONE ESC PARA CONTINUAR y APRIETE LA X PARA CERRAR EL JUEGO en el medio de la pantalla
     int end=1;
     while(end){
-        if( tecla==pausa){
+        if( tecla==PAUSA){      //si volvio a apretar esc entonces vuelve al juego e imprime background
             stop=0;
             end=0;
             tecla=0;
              draw_background(punt,vid);
         }  
-        else if( tecla==salir){
+        else if( tecla==SALIR){             //si apreto la cruz roja entonces imprime saliendo, espera y sale del juego
             end=0;
             al_clear_to_color(al_map_rgb(255, 255, 255));
             al_draw_text(font_pausa, al_map_rgb(0, 0, 0), FONT_NIVEL_X, FONT_NIVEL_Y, ALLEGRO_ALIGN_CENTER, "saliendo del juego...");
@@ -537,36 +551,36 @@ int menu_allegro(int punt, int niv,int vid){
 
 
 
-void print_lvl (int nivel){
+void print_lvl (int nivel){             //funcion que imprime en que nivel estas antes de cada nivel, recibe el nivel y no devuelve nada
     al_rest(0.5);
-    al_draw_textf(font_nivel, al_map_rgb(0, 0, 0), FONT_NIVEL_X, FONT_NIVEL_Y , ALLEGRO_ALIGN_CENTER, "NIVEL %d",nivel);
+    al_draw_textf(font_nivel, al_map_rgb(0, 0, 0), FONT_NIVEL_X, FONT_NIVEL_Y , ALLEGRO_ALIGN_CENTER, "NIVEL %d",nivel);        //imprime que NIVEL y cual es, en blanco con efecto 3D
     al_draw_textf(font_nivel, al_map_rgb(255, 255, 255), FONT_NIVEL_X+5 , FONT_NIVEL_Y-5 , ALLEGRO_ALIGN_CENTER, "NIVEL %d",nivel);
     al_flip_display();
     al_rest(1.0);
 }
 
-void print_vida (void){
-    if(vida==2){
+void print_vida (void){                     //funcion que me imprime las vidas que tiene el jugador, no recibe nada y no devuelve nada
+    if(vida==2){                                    //si tiene dos vidas, imprime dos corazones completos y uno roto
         al_draw_bitmap(vidas,VIDA_1_X,VISTA_Y,0);
         al_draw_bitmap(vidas,VIDA_2_X,VISTA_Y,0); 
         al_draw_bitmap(vida_perdida,VIDA_3_X,VISTA_Y,0);        
     }
-    else if(vida==1){
+    else if(vida==1){                               //si tiene una vida, imprime un corazon completo y dos rotos
         al_draw_bitmap(vidas,VIDA_1_X,VISTA_Y,0); 
         al_draw_bitmap(vida_perdida,VIDA_2_X,VISTA_Y,0); 
         al_draw_bitmap(vida_perdida,VIDA_3_X,VISTA_Y,0);
     }
-    else if(vida==0){
+    else if(vida==0){                               //si no tiene mas vidas, imprime tres corazones rotos
         al_draw_bitmap(vida_perdida,VIDA_1_X,VISTA_Y,0); 
         al_draw_bitmap(vida_perdida,VIDA_2_X,VISTA_Y,0); 
         al_draw_bitmap(vida_perdida,VIDA_3_X,VISTA_Y,0);
     }
 }
 
-void print_gameover(int puntaje){
-    al_clear_to_color(al_map_rgb(0, 0, 0));
+void print_gameover(int puntaje){           //funcion que imprime GAME OVER y SCORE cuando perdes, recibe el puntaje y no devuelve nada
+    al_clear_to_color(al_map_rgb(0, 0, 0));                                                                         //imprime pantalla en negro
     al_flip_display();
-    al_draw_textf(font_nivel, al_map_rgb(255, 255, 255), 300, 150, ALLEGRO_ALIGN_CENTER, "SCORE  %d",puntaje);
+    al_draw_textf(font_nivel, al_map_rgb(255, 255, 255), SCORE_X, SCORE_Y, ALLEGRO_ALIGN_CENTER, "SCORE  %d",puntaje);      //impreme el score que hiciste GAME OVER en 3D
     al_draw_text(font_nivel, al_map_rgb(0, 0, 255), FONT_NIVEL_X-5, FONT_NIVEL_Y+5 , ALLEGRO_ALIGN_CENTER, "GAME OVER");
     al_draw_text(font_nivel, al_map_rgb(255, 0, 0), FONT_NIVEL_X, FONT_NIVEL_Y , ALLEGRO_ALIGN_CENTER, "GAME OVER");
     al_draw_text(font_nivel, al_map_rgb(255, 255, 255), FONT_NIVEL_X+5 , FONT_NIVEL_Y-5 , ALLEGRO_ALIGN_CENTER, "GAME OVER");
@@ -574,7 +588,7 @@ void print_gameover(int puntaje){
     al_rest(2.5); 
 }
 
-void destroy_allegro (void){
+void destroy_allegro (void){            //funcion que destruye todo allegro, no recibe nada y no devuelve nada
     printf("\n");
     printf("cerrando allegro...\n");
     al_destroy_display(display);                //se libera la memoria dinamica , destruyendo los elemntos usados

@@ -17,6 +17,7 @@ extern "C" {
 #include <unistd.h>
 #include "levels.h"
 
+/*DEFINES*/
 #define SUPERFICIE 11
 #define ALTURA 16
 #define LARGO 70
@@ -35,10 +36,13 @@ extern "C" {
 #define MAX_ENEM 18
 #define LARGO_ELEMENTO 40
 #define ALTO_ELEMENTO 34
+#define VELOCIDAD_PEZ 1.0
+#define VELOCIDAD_PES 2.0
+#define VELOCIDAD_PULPO 1.5
     
     
-
-void creacionmap(int);   
+/*PROTOTIPOS*/
+void creacionmap(int);                  //esta funcion crea los mapas, niveles: 1,2 y 3. en matrices de tamanio ALTOxLARGO, recibe que nivel es y no devuelve nada
 
 #ifdef __cplusplus
 }

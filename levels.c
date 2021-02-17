@@ -6,16 +6,20 @@
 
 
 #include "levels.h"
-extern int lvl_1[ALTURA][LARGO];
+
+extern int lvl_1[ALTURA][LARGO];            //la matriz de los niveles que estan en main.c
 extern int lvl_2[ALTURA][LARGO];
 extern int lvl_3[ALTURA][LARGO];
 
-void creacionmap(int que_nivel){        //creacion de los mapas, niveles: 1,2 y 3.
+void creacionmap(int que_nivel){        //esta funcion crea los mapas, niveles: 1,2 y 3. en matrices de tamanio ALTOxLARGO, recibe que nivel es y no devuelve nada
     
     switch(que_nivel){
     
-        case 1:                             
+        case 1:                        //NIVEL 1     
+            
+            //MARIO
             lvl_1[7][0]=MARIO;
+            
             //ENEMIGOS
             lvl_1[4][24]=PEZ;
             lvl_1[9][26]=PEZ;
@@ -28,7 +32,8 @@ void creacionmap(int que_nivel){        //creacion de los mapas, niveles: 1,2 y 
             lvl_1[10][6]=PULPO;
             lvl_1[12][28]=PULPO;
             lvl_1[11][45]=PULPO;
-            //
+            
+            //MAPA
             for(int i=0;i<LARGO;i++)
             {
                     lvl_1[0][i]=SUPERFICIE;
@@ -200,8 +205,10 @@ void creacionmap(int que_nivel){        //creacion de los mapas, niveles: 1,2 y 
 		lvl_1[12][LARGO-2]=FINAL;
                 
                 break;
-        case 2:
+                
+        case 2:                             //NIVEL 2
             
+            //MARIO
             lvl_2[10][0]=MARIO;
             //ENEMIGOS
             lvl_2[8][5]=PEZ;
@@ -224,7 +231,8 @@ void creacionmap(int que_nivel){        //creacion de los mapas, niveles: 1,2 y 
             lvl_2[8][38]=PULPO;
             lvl_2[9][53]=PULPO;
             lvl_2[9][63]=PULPO;
-            //
+            
+            //MAPA
             for(int i=0;i<LARGO;i++)
             {
                     lvl_2[0][i]=SUPERFICIE;
@@ -480,7 +488,9 @@ void creacionmap(int que_nivel){        //creacion de los mapas, niveles: 1,2 y 
             break;
        
         
-        case 3:
+        case 3:                         //NIVEL 3
+            
+            //MARIO
             lvl_3[10][0]=MARIO;
             //ENEMIGOS
             lvl_3[4][14]=PEZ;
@@ -512,8 +522,8 @@ void creacionmap(int que_nivel){        //creacion de los mapas, niveles: 1,2 y 
             lvl_3[11][53]=PULPO;
             lvl_3[10][55]=PULPO;
             lvl_3[7][63]=PULPO;
-            //
             
+            //MAPA
             for(int i=0;i<LARGO;i++)
             {
                     lvl_3[0][i]=SUPERFICIE; //
@@ -677,13 +687,14 @@ void creacionmap(int que_nivel){        //creacion de los mapas, niveles: 1,2 y 
             {
                     lvl_3[k][27]=ALGA;      //
             }
-            lvl_3[11][37]=BLOQUE;                 //
+            
+            lvl_3[11][27]=BLOQUE;                 //
             
             for(int k=2;k<5;k++)
             {
                     lvl_3[k][28]=ALGA;      //
             }
-            lvl_3[5][38]=BLOQUE;  
+            lvl_3[5][28]=BLOQUE;  
             
             for(int k=2;k<5;k++)
             { 
@@ -782,6 +793,7 @@ void creacionmap(int que_nivel){        //creacion de los mapas, niveles: 1,2 y 
             {
                 lvl_3[k][45]=ALGA;        //
             }
+            lvl_3[10][45]=BLOQUE;
 
             for(int k=2;k<6;k++)
             {
@@ -825,11 +837,13 @@ void creacionmap(int que_nivel){        //creacion de los mapas, niveles: 1,2 y 
             lvl_3[3][60]=MONEDA;
             lvl_3[13][61]=MONEDA;   //
             lvl_3[13][63]=MONEDA;   //
-
+            
+            lvl_3[5][60]=BLOQUE;
             for(int k=11;k<14;k++)
             {
                     lvl_3[k][62]=BLOQUE;     //
             }
+            lvl_3[7][61]=BLOQUE;
 
             for(int k=2;k<5;k++)
             {
@@ -839,7 +853,7 @@ void creacionmap(int que_nivel){        //creacion de los mapas, niveles: 1,2 y 
             
             for(int k=6;k<9;k++)
             {
-                    lvl_3[k][60]=BLOQUE;         //
+                    lvl_3[k][59]=BLOQUE;         //
                 
             }
             
@@ -848,6 +862,12 @@ void creacionmap(int que_nivel){        //creacion de los mapas, niveles: 1,2 y 
                 lvl_3[k][62]=ALGA;
             }
             lvl_3[5][62]=BLOQUE;  
+            
+            for(int k=6;k<9;k++)
+            {
+                    lvl_3[k][62]=BLOQUE;         //
+                
+            }
 
             for(int i=(LARGO-5);i<LARGO;i++)
             {
@@ -863,7 +883,7 @@ void creacionmap(int que_nivel){        //creacion de los mapas, niveles: 1,2 y 
                     lvl_3[k][LARGO-1]=BLOQUE;
             }
 
-            for(int k=60;k<(LARGO-1);k++)
+            for(int k=62;k<(LARGO-1);k++)
             {
                     lvl_3[13][k]=BLOQUE;
             }

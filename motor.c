@@ -8,7 +8,7 @@
 #include "motor.h"
 
 
-extern int tecla;
+extern int tecla;                           //variables que necesito de main.c para algunas funciones
 extern int pos[3];
 extern int stop;
 extern int(*niveles[2])[ALTURA][LARGO];
@@ -17,37 +17,37 @@ extern int vida;
 extern int nivel;
 
 
-extern int lvl_1[ALTURA][LARGO];
+extern int lvl_1[ALTURA][LARGO];            //la matriz de los niveles que estan en main.c
 extern int lvl_2[ALTURA][LARGO];
 extern int lvl_3[ALTURA][LARGO];
 
-pthread_mutex_t lock1,lock2;
+pthread_mutex_t lock1,lock2;                //para crear candados en las funciones
 
 
-void bienvenida (void){
+void bienvenida (void){             //funcion que le da la bievenida al usuario por display, no recibe nada y no devuellve nada
     printf("Bienvenido a la beta del super mario\n");
 }
 
 
-void movimiento(int arr[ALTURA][LARGO], int boton){         /*realiza el movimiento efectivo de mario*/
+void movimiento(int arr[ALTURA][LARGO], int boton){         //funcion que realiza el movimiento efectivo de mario, recibe un arreglo (nivel) e un int (boton) y no devuelve nada
     
    pthread_mutex_lock(&lock1);      /*esta funcion tiene un candado , de tal manera que no se pisen con otra llamdada*/
    int i=pos[0];                    /*es decir que trabaja solo con una llamda y luego atiende las siguientes*/
    int j=pos[1];
    switch(boton){
-       case up:
+       case UP:
            arr[i-1][j]=1;
            arr[i][j]=0;
            break;
-       case down:
+       case DOWN:
            arr[i+1][j]=1;
            arr[i][j]=0;
            break;
-       case right:
+       case RIGHT:
            arr[i][j+1]=1;
            arr[i][j]=0;
            break;
-       case left:
+       case LEFT:
            arr[i][j-1]=1;
            arr[i][j]=0;
            break;
@@ -55,7 +55,7 @@ void movimiento(int arr[ALTURA][LARGO], int boton){         /*realiza el movimie
    pthread_mutex_unlock(&lock1);
 }
 
-void ctrl_posicion(int arr[ALTURA][LARGO],int pos[3]){  /*se le pasa la matriz nivel, y un arreglo en donde se va a guarda la posicion de mario*/
+void ctrl_posicion(int arr[ALTURA][LARGO],int pos[3]){              //funcion que recibe la matriz nivel, y una matriz en donde se va a guarda la posicion de mario y no devuelve nada
     
     pthread_mutex_lock(&lock2);     /*tambien posee un candado*/
     if((16+pos[2])<LARGO){          /*en el ultimo elemento se guarda la cnatidad de movimiento del mapa*/
@@ -82,7 +82,7 @@ void ctrl_posicion(int arr[ALTURA][LARGO],int pos[3]){  /*se le pasa la matriz n
     pthread_mutex_unlock(&lock2);
 }
 
-void printmat(int arr[ALTURA][LARGO]){
+void printmat(int arr[ALTURA][LARGO]){          //funcion que imprime la matriz nivel dependiendo de donde este el mario de 16x16, recibe una matriz (nivel) y no devuelve nada
     if(((16+pos[2])-pos[1])<=8){        //se lee la columna en donde esta mario y se mueve le mapa si esta en la mitad
         pos[2]+=4;                      //la cantidad de este movimineto se guarda en el tercer elemento del arreglo, se elije por default que se mueva de a 4
     }  
@@ -106,21 +106,21 @@ void printmat(int arr[ALTURA][LARGO]){
 
 
 
-int reglas(int arr[ALTURA][LARGO],int boton){ /*se le pasa el nivel en el que se esta jugando, y el comando accionado*/
+int reglas(int arr[ALTURA][LARGO],int boton){                   //funcion que se le pasa una matriz (nivel) en el que se esta jugando, y el comando accionado (boton) y no devuelve nada
                             /*se devuelve 1 si el movimiento no esta permitido,2 si agarro una moneda,3 si murio 4 si llego al final y 0 si el movimineto esta permitido*/
     int i=pos[0];           /*copio la posicion de actual de mario*/
     int j=pos[1];           /*i es fila y j es col*/
  
-    if (boton==up){
+    if (boton==UP){
         i-=1;
     }
-    else if (boton==down){
+    else if (boton==DOWN){
         i+=1;
     }
-    else if(boton ==right){
+    else if(boton ==RIGHT){
         j+=1;
     }
-    else if(boton==left){       /*CONTROLAR QUE NO SEA NEGATIVO*/
+    else if(boton==LEFT){                   /*CONTROLAR QUE NO SEA NEGATIVO*/
         j-=1;
     }    
     switch(arr[i][j]){
@@ -139,7 +139,7 @@ int reglas(int arr[ALTURA][LARGO],int boton){ /*se le pasa el nivel en el que se
 }
 
 
-int menu(void){
+int menu(void){                             //funcion que imprime el menu de pausa, no recibe nada y devuelve un 0
     printf("************MENU(BETA)*************\n");
     printf("PUNTAJE:%d\n",puntaje);
     printf("VIDA:%d\n",vida);
@@ -147,13 +147,13 @@ int menu(void){
    // printf("Para reanudar el juego presione nuevamente p, para finalizar la partida presione f\n");
     int fin=1;
     while(fin){
-        if( tecla==pausa){
+        if( tecla==PAUSA){
             stop=0;
             fin=0;
             tecla=0;
              printf("reanudando juego...\n");
         }  
-        else if( tecla==salir){
+        else if( tecla==SALIR){
             fin=0;
             printf("saliendo del juego....\n");
         }
@@ -173,12 +173,12 @@ int menu(void){
 //                                                                                                                                //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void*  caida ( ){
-    int boton_aux=down;
+void*  caida ( ){                           //thread para la caida de mario , impuesta por la gravedad
+    int boton_aux=DOWN;
     int val;
     
     while(1){
-        while(stop){        //paauso el thread , porque pausaron le juego
+        while(stop){        //pauso el thread , porque pausaron le juego
         }
         sleep(1);
         ctrl_posicion(*niveles[nivel-1],pos);
@@ -209,46 +209,7 @@ void*  caida ( ){
     
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
- 
-//entrada vieja , capz sirve// 
-void* entrad (){
-    int i;
-    while(1){
-        i=getchar();
-        if(i=='W' || i=='w'){ //up
-            getchar();       //libero buffer
-            tecla= up;
-            
-        }
-        else if(i=='D' || i=='d'){//right
-           getchar();
-           tecla=right;
-        }
-        else if(i=='S' || i=='s'){//down
-            getchar();
-            tecla =down;
-        }
-        else if(i=='A' || i=='a'){//left
-            getchar();
-            tecla=left;
-        }
-        else if(i=='P'|| i=='p'){
-            getchar();
-            tecla=pausa;
-        }
-        else if(i=='F' || i=='f'){
-            getchar();
-            tecla=salir;
-            printf("se presiono f\n");
-        }
-        else{
-            //printf("introdujo un movimiento no permitido\n");
-            return 0;
-        }
-    }    
-}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                                                                                //
@@ -258,7 +219,7 @@ void* entrad (){
 //                                                                                                                                //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void * enemigo_pez(){           //este thread controla los movimientos del pez que va mas rapido en el mapa
+void * enemigo_pez(){               //thread que controla los movimientos del pez que va mas rapido en el mapa
     while(1){
         int pez = 1;                //variable que uso para el while
 
@@ -286,9 +247,9 @@ void * enemigo_pez(){           //este thread controla los movimientos del pez q
         pezes[16]= &lvl_3[7][48];     
         pezes[17]= &lvl_3[3][56];
 
-        int cant_pez = 3*nivel;           //cantidad de enemigos PEZ por nivel
         
         int nivel_var = nivel;
+        int cant_pez = 3*nivel_var;           //cantidad de enemigos PEZ por nivel
 
         int q=0;
         int i;
@@ -318,12 +279,14 @@ void * enemigo_pez(){           //este thread controla los movimientos del pez q
                 pez = 0;
             }
 
-            else if (  (  ( pezes[i] - (dir_niveles[nivel-1]) )    % LARGO  )  == 0){         //si esta en la columna 0, entonces listo el PEZ
+            else if (  (  ( pezes[i] - (dir_niveles[nivel_var-1]) )    % LARGO  )  == 0){         //si esta en la columna 0, entonces listo el PEZ
 
                 *pezes[i]=AGUA;                                                     //que me ponga agua
                                                                       //ya el primer PEZ no existe
                 while(i < (hasta-1)){                               //ahora el arreglo tiene solo dos pescados, en pezes[0] y en pezes[1] .
                     pezes[i]=pezes[i+1];
+                    valor1[i]=valor1[i+1];
+                    valor2[i]=valor2[i+1];
                     i++;
                 }		
                 cant_pez -=1;                                                   //bajo la cantidad de PEZ porque van desapareciendo
@@ -350,7 +313,7 @@ void * enemigo_pez(){           //este thread controla los movimientos del pez q
                         pezes [i] -= 1;					//la nueva direeccion del pez es la de la izquuierda
                         i++;
                     }
-                    sleep(1.0);             //velocidad de los peZes
+                    sleep(VELOCIDAD_PEZ);             //velocidad de los peZes
                 }			
                 else{
                     while (i < hasta){		        
@@ -373,7 +336,7 @@ void * enemigo_pez(){           //este thread controla los movimientos del pez q
                         valor1 [i]= valor2[i];			//pongo en valor 1 lo que esta valor 2  asi ya se vuelve a poner otra vez
                         i++;                            //todo es para que avance un pez, aumento i para que vaya al otro pez
                     }
-                    sleep(1.0);             //velocidades de los peZes
+                    sleep(VELOCIDAD_PEZ);             //velocidades de los peZes
                 }
 
             }		
@@ -398,7 +361,7 @@ void * enemigo_pez(){           //este thread controla los movimientos del pez q
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void * enemigo_pes(){           //este thread controla los movimientos del pes que va mas lento en el mapa
+void * enemigo_pes(){           //thread que controla los movimientos del pes que va mas lento en el mapa
     while(1){
         int pes = 1;                //variable que uso para el while
 
@@ -426,17 +389,17 @@ void * enemigo_pes(){           //este thread controla los movimientos del pes q
         peses[16]= &lvl_3[8][56];     
         peses[17]= &lvl_3[12][64];
 
-        int cant_pes = 3*nivel;           //cantidad de enemigos PES por nivel
         
         int nivel_var = nivel;
+        int cant_pes = 3*nivel_var;           //cantidad de enemigos PES por nivel
 
         int q=0;
         int i;
         int hasta;
-        int valor1 [MAX_ENEM];		//arreglo que guardo las posiciones de los peSes
-        int valor2 [MAX_ENEM];		//arreglo que salvo las posiciones de los peSes
+        int valor3 [MAX_ENEM];		//arreglo que guardo las posiciones de los peSes
+        int valor4 [MAX_ENEM];		//arreglo que salvo las posiciones de los peSes
 
-        if(nivel == 1){                     //cantidad de enemigos PEZ por nivel y hasta donde llegan en el arreglo de punteros
+        if(nivel == 1){                     //cantidad de enemigos PES por nivel y hasta donde llegan en el arreglo de punteros
             i=0;
             hasta=3;
         }
@@ -449,7 +412,7 @@ void * enemigo_pes(){           //este thread controla los movimientos del pes q
             hasta=18;
         }
 
-        while ((pes) && (nivel_var==nivel)){                //hasta que no hayan peZes o hasta que cambie de nivel 
+        while ((pes) && (nivel_var==nivel)){                //hasta que no hayan peSes o hasta que cambie de nivel 
             while (stop){               //para la pausa
             }
 
@@ -458,12 +421,14 @@ void * enemigo_pes(){           //este thread controla los movimientos del pes q
                 pes = 0;                    //que pare si no hay mas peSes
             }
 
-            else if (  (  ( peses[i] - (dir_niveles[nivel-1]) )    % LARGO  )  == 0){         //si esta en la columna 0, entonces listo el PES
+            else if (  (  ( peses[i] - (dir_niveles[nivel_var-1]) )    % LARGO  )  == 0){         //si esta en la columna 0, entonces listo el PES
 
                 *peses[i]=AGUA;                                                     //que me ponga agua
                                                                       //ya el primer PES no existe
                 while(i < (hasta-1)){                               //ahora el arreglo tiene solo dos pescados, en peses[0] y en peses[1] .
                     peses[i]=peses[i+1];
+                    valor3[i]=valor3[i+1];
+                    valor4[i]=valor4[i+1];
                     i++;
                 }		
                 cant_pes -=1;                                                   //bajo la cantidad de PES porque van desapareciendo
@@ -474,8 +439,8 @@ void * enemigo_pes(){           //este thread controla los movimientos del pes q
             else{								//SI NO ESTA EN LA PRIMER COLUMNA
                 if(q<cant_pes){								//SI SE MUEVE POR PRIMERA VEZ
                     while (i < hasta){		            
-                        valor1[i] = *(peses[i]-1);               //guardo el valor para salvar lo que valia antes de que caiga el pes               
-                        if(valor1[i]==MARIO){       
+                        valor3[i] = *(peses[i]-1);               //guardo el valor para salvar lo que valia antes de que caiga el pes               
+                        if(valor3[i]==MARIO){       
                             vida-=1;
 #ifdef RASPI
                             printf("Perdiste una vida , te quedan:%d\n",vida);
@@ -490,12 +455,12 @@ void * enemigo_pes(){           //este thread controla los movimientos del pes q
                         peses [i] -= 1;					//la nueva direeccion del pes es la de la izquuierda
                         i++;
                     }
-                    sleep(2.0);                 //velocidad de los peSes
+                    sleep(VELOCIDAD_PES);                 //velocidad de los peSes
                 }			
                 else{
                     while (i < hasta){		        
-                        valor2[i] = *(peses[i]-1);               //guardo el valor para salvar lo que valia antes de que caiga el pes	
-                        if(valor2[i]==MARIO){       
+                        valor4[i] = *(peses[i]-1);               //guardo el valor para salvar lo que valia antes de que caiga el pes	
+                        if(valor4[i]==MARIO){       
                             vida-=1;
 #ifdef RASPI
                             printf("Perdiste una vida , te quedan:%d\n",vida);
@@ -503,16 +468,16 @@ void * enemigo_pes(){           //este thread controla los movimientos del pes q
                         } 
                                     //aca ya salve el valor de lo que habia y se guarda en valor
                         *(peses[i]-1) = PES;            //muevo el PES para la izquierda	
-                        * peses [i] = valor1[i];        //salvo lo que habia antes	       
+                        * peses [i] = valor3[i];        //salvo lo que habia antes	       
 
                         peses [i] -= 1;	
-                        if ((valor2[i] == MARIO) || (valor2[i] == PULPO) || (valor2[i] == PES) || (valor2[i] == PEZ)){
-                            valor2[i] = AGUA;                              //si justo hay otra cos, que me ponga agua
+                        if ((valor4[i] == MARIO) || (valor4[i] == PULPO) || (valor4[i] == PES) || (valor4[i] == PEZ)){
+                            valor4[i] = AGUA;                              //si justo hay otra cos, que me ponga agua
                         }                               //la nueva direeccion del pes es la de la izquuierda
-                        valor1 [i]= valor2[i];			//pongo en valor 1 lo que esta valor 2  asi ya se vuelve a poner otra vez
+                        valor3 [i]= valor4[i];			//pongo en valor 3 lo que esta valor 4  asi ya se vuelve a poner otra vez
                         i++;                            //todo es para que avance un pes, aumento i para que vaya al otro pes
                     }
-                    sleep(2.0);         //velocidad de los peSes
+                    sleep(VELOCIDAD_PES);         //velocidad de los peSes
                 }
 
             }		
@@ -537,7 +502,7 @@ void * enemigo_pes(){           //este thread controla los movimientos del pes q
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void * enemigo_pulpo(){             ////este thread controla los movimientos del pulpo en el mapa
+void * enemigo_pulpo(){                 //thread que controla los movimientos del pulpo
     while(1){
 
 
@@ -564,9 +529,10 @@ void * enemigo_pulpo(){             ////este thread controla los movimientos del
         pulpos[16]= &lvl_3[10][55];     
         pulpos[17]= &lvl_3[7][63];
 
-        int cant_pulpo = 3*nivel;     //cantidad de enemigos PULPO por nivel 
+        
         
         int nivel_var = nivel;
+        int cant_pulpo = 3*nivel_var;     //cantidad de enemigos PULPO por nivel 
         
         int f;
         int hasta;
@@ -607,7 +573,7 @@ void * enemigo_pulpo(){             ////este thread controla los movimientos del
                     pulpos [f] -= LARGO;					//la nueva direeccion del pulpo es la de una para arriba
                     f++;							//hasta el ultimpo pulpo, todos se mueven para arriba
                 }
-                sleep(1.5);     //velocidad de los pulpos
+                sleep(VELOCIDAD_PULPO);     //velocidad de los pulpos
             }	
             else{		
                 for(k=0;k<MOV_PULPO;k++){				//MOVIMIENTO DEL PULPO PARA ARRIBA
@@ -661,7 +627,7 @@ void * enemigo_pulpo(){             ////este thread controla los movimientos del
                         valor5 [f]= valor6[f];				//pongo en valor 1 lo que esta valor 2  asi ya se vuelve a poner otra vez
                         f++;							//hasta el ultimpo pulpo, todos se mueven para abajo
                     }
-                    sleep(1.5);     //velocidad de los peSes
+                    sleep(VELOCIDAD_PULPO);     //velocidad de los peSes
                     if(nivel_var == 1){                     //vuelvo a arrancar desde el primer pulpo
                         f=0;
                     }

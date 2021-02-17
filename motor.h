@@ -14,21 +14,21 @@ extern "C" {
 #include "levels.h"
 #include "motor.h"
 #include "allegro.h" 
-
     
     
-void bienvenida (void);
-void printmat(int arr[ALTURA][LARGO]); /*creo que no es necesario pasarle una arreglo*/
-void movimiento(int arr[ALTURA][LARGO],int boton);  /*realiza el movimiento efectivo de mario*/
-void ctrl_posicion(int arr[ALTURA][LARGO],int pos[3]);  /*Funcion que busca la posicion de mario en el mapa (Matriz), se le pasa el nivel y la cantidad de movimiento del mapa*/
-int reglas (int arr[ALTURA][LARGO],int boton);      /*evalua la validez del movimietno del mario*/
-int menu(void);
+/*PROTOTIPOS*/
+void bienvenida (void);                                     //funcion que le da la bievenida al usuario por display, no recibe nada y no devuellve nada
+void movimiento(int arr[ALTURA][LARGO],int boton);          //funcion que recibe la matriz nivel, y un arreglo en donde se va a guarda la posicion de mario y no devuelve nada
+void ctrl_posicion(int arr[ALTURA][LARGO],int pos[3]);      //funcion que recibe la matriz nivel, y una matriz en donde se va a guarda la posicion de mario y no devuelve nada
+void printmat(int arr[ALTURA][LARGO]);                      //funcion que imprime la matriz nivel dependiendo de donde este el mario de 16x16, recibe una matriz (nivel) y no devuelve nada
+int reglas (int arr[ALTURA][LARGO],int boton);              //funcion que se le pasa una matriz (nivel) en el que se esta jugando, y el comando accionado (boton) y no devuelve nada
+int menu(void);                                             //funcion que imprime el menu de pausa, no recibe nada y devuelve un 0
 
-void * caida ();    /*caida de mario , impuesta por la gravedad */
-void *entrad();
-void * enemigo_pez();
-void * enemigo_pes();
-void * enemigo_pulpo();
+/*THREADS*/
+void * caida ();                                            //thread para la caida de mario , impuesta por la gravedad                                            
+void * enemigo_pez();                                       //thread que controla los movimientos del pez que va mas rapido en el mapa
+void * enemigo_pes();                                       //thread que controla los movimientos del pes que va mas lento en el mapa
+void * enemigo_pulpo();                                     //thread que controla los movimientos del pulpo en el mapa
 
 
 #ifdef __cplusplus
