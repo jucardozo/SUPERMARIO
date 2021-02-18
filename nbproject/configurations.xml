@@ -28,6 +28,7 @@
       <itemPath>pez.png</itemPath>
       <itemPath>press_start.jpg</itemPath>
       <itemPath>pulpo.png</itemPath>
+      <itemPath>../../Descargas/sonido_moneda.wav</itemPath>
       <itemPath>vida.jpeg</itemPath>
       <itemPath>vida_perdida.jpeg</itemPath>
     </logicalFolder>
@@ -80,6 +81,8 @@
           </linkerLibItems>
         </linkerTool>
       </compileType>
+      <item path="../../Descargas/sonido_moneda.wav" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="agua.png" ex="false" tool="3" flavor2="0">
       </item>
       <item path="alga.png" ex="false" tool="3" flavor2="0">
@@ -153,6 +156,8 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="../../Descargas/sonido_moneda.wav" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="agua.png" ex="false" tool="3" flavor2="0">
       </item>
       <item path="alga.png" ex="false" tool="3" flavor2="0">

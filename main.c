@@ -205,7 +205,8 @@ int main() {
                     print_mat_rspi(*niveles[i]);                                //impreime mapa
 #endif
                     movimiento(*niveles[i],boton);                              //para ver movimiento
-#ifdef PC            
+#ifdef PC           
+                    coin_sound();
                     draw_background();                                          //imprimo para que se vea el puntaje nuevo
                     print_map_allegro(*niveles[i]);                             //imprime mapa
 #endif

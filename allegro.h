@@ -65,7 +65,7 @@ void print_vida (void);                                 //funcion que me imprime
 void print_win(void);                                   //funcion que imprime en pantalla cuando el jugadir gana, no recibe nada y no devuelve nada
 void print_gameover(void);                              //funcion que imprime GAME OVER y SCORE cuando perdes, no recibe nada y no devuelve nada
 void destroy_allegro (void);                            //funcion que destruye todo allegro, no recibe nada y no devuelve nada
-
+void coin_sound(void);                                  //funcion que emite un sonido cada vez que una moneda fue capturada 
 /*THREADS*/
 void * entrad_allegro();                                //thread que recibe por comando el movimiento deseado por el jugador
 

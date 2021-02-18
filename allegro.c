@@ -11,6 +11,7 @@
 //los bitmaps estan definidos en el punto h
 ALLEGRO_DISPLAY *display;                       //se crean  puntero hacia estrucuras de allegro
 ALLEGRO_SAMPLE *music = NULL;                  //Musica
+ALLEGRO_SAMPLE *sound = NULL;                  //Sonido
 ALLEGRO_TIMER *timer = NULL;
 ALLEGRO_EVENT_QUEUE *event_queue = NULL;        //Cola de eventos*/
 
@@ -208,7 +209,7 @@ int inicializacion(){                                       //funcion que inicia
         return -1;                                                                                                                          //
     }                                                                                                                                       //
                                                                                                                                             //
-    if (!al_reserve_samples(1)) {                                                                                                           //
+    if (!al_reserve_samples(2)) {                                                                                                           //
         fprintf(stderr, "failed to reserve samples!\n");                                                                                    //
         al_uninstall_system();                                                                                                              //
         al_shutdown_image_addon();                                                                                                          //
@@ -216,9 +217,18 @@ int inicializacion(){                                       //funcion que inicia
         return -1;                                                                                                                          //
     }                                                                                                                                       //
                                                                                                                                             //
-    music = al_load_sample("musica.wav");                                                                                                   //
+    music = al_load_sample("musica.wav");  
+    sound = al_load_sample("sonido_moneda.wav");//
                                                                                                                                             //
     if (!music) {                                                                                                                           //
+        printf("Audio clip sample not loaded!\n");                                                                                          //
+        al_uninstall_system();                                                                                                              //
+        al_shutdown_image_addon();                                                                                                          //
+        al_destroy_display(display);                                                                                                        //
+        return -1;                                                                                                                          //
+    }   
+    
+     if (!sound) {                                                                                                                           //
         printf("Audio clip sample not loaded!\n");                                                                                          //
         al_uninstall_system();                                                                                                              //
         al_shutdown_image_addon();                                                                                                          //
@@ -576,6 +586,10 @@ void print_vida (void){                     //funcion que me imprime las vidas q
     }
 }
 
+void coin_sound(void){
+    al_play_sample(sound,1,0,1,ALLEGRO_PLAYMODE_ONCE,NULL);             //reproduce el sonido una sola vez cuando mario colecta una moneda     
+}
+
 void print_win(void){           //funcion que imprime en pantalla cuando el jugadir gana, no recibe nada y no devuelve nada
     al_clear_to_color(al_map_rgb(0, 0, 0));                                                                         //imprime pantalla en negro
     al_flip_display();
@@ -622,6 +636,7 @@ void destroy_allegro (void){            //funcion que destruye todo allegro, no 
     al_destroy_bitmap(men_pausa);
     al_uninstall_audio();                                                                                                                                    //
     al_destroy_sample(music);
+    al_destroy_sample(sound);
     al_destroy_timer(timer);
     al_destroy_event_queue(event_queue); 
 }
