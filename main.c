@@ -185,7 +185,7 @@ int main() {
                         vida=0;
                 }
                 int val=reglas(*niveles[i],boton);                              /*val, guarda la evaluacion de reglas*/
-                if(val==0){                                                     /*si el movimiento esta permitido , lo mueve efectivamente*/
+                if(val==0 && boton != PAUSA){                                                     /*si el movimiento esta permitido , lo mueve efectivamente*/
                     
                     movimiento(*niveles[i],boton);                              /*realza el movimiento efectivo, solo de Mario*/         
 #ifdef PC
@@ -197,7 +197,7 @@ int main() {
 #endif
                     tecla=0;                                                    //setea tecla
                 }
-                else if(val==2){                                                /*recogio una moneda*/   
+                else if(val==2 && boton!=PAUSA){                                                /*recogio una moneda*/   
                     puntaje+=10;
 #ifdef RASPI
                     printf("PUNTAJE:%d\n",puntaje);                             //imprimo el puntaje si agarro moneda
@@ -212,7 +212,7 @@ int main() {
 
                     tecla=0;                                                    //setea tecla
                 }
-                else if(val==4){                                                //paso de nivel
+                else if(val==4&& boton!=PAUSA){                                                //paso de nivel
                     puntaje+=100;                                               /*si es 4 es porque llego a la meta*/
 #ifdef RASPI
                     printf("Bien jugado,pasaste de nivel\n");
@@ -226,7 +226,7 @@ int main() {
                     al_flip_display();
 #endif
                 }
-                else if(val==3){
+                else if(val==3 && boton!=PAUSA){
                     vida-=1;                                                    /*si es 3 es porque mario perdio una vida*/
                     if(vida<0){
 #ifdef PC
