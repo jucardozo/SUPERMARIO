@@ -28,6 +28,7 @@ extern "C" {
 #define SALIR 105 
 #define TRUE 1
 #define FALSE 0
+#define REINICIAR 106
 
 /*ALLEGRO*/
 #define FPS    60.0

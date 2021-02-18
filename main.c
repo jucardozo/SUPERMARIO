@@ -35,12 +35,13 @@
 #define DOWN 103
 #define PAUSA 104
 #define SALIR 105
+#define REINICIAR 106
 
 
 
 
 /*Globales*/
-int nivel=3;
+int nivel=1;
 int stop;                                                                       //variable que uso para pausar el juego
 int fin=1;
 int puntaje=0;                                                                  /*se lleva el conteo del puntaje*/
@@ -95,10 +96,10 @@ int main() {
     while(vida>0){
         switch(nivel){                                                          //habilita el control, automatico, de cada enemigo en cada nivel//
             case 1 :                                                            //NIVEL 1
-                    creacionmap(nivel);                                         //se crea el NIVEL 1
                     pos[0]=0;
                     pos[1]=0;
-                    pos[2]=0;
+                    pos[2]=0;                   
+                    creacionmap(nivel);                                         //se crea el NIVEL 1
 #ifdef PC
                     draw_background ();                                         //imprimimos el detras de escena
                     al_flip_display();                
@@ -174,10 +175,12 @@ int main() {
 #ifdef PC
                     menu_allegro();                                             //imprimimos el menu de pausa
 #endif
-
                     if(tecla==SALIR){                                           //salida provocada por el menu
                         fin=0;
                         vida=0;
+                    }
+                    else if(tecla==REINICIAR){
+                        fin=0;
                     }
                 }
                 else if (boton==SALIR){                                         //salida provocada por display

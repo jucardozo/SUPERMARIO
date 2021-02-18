@@ -273,9 +273,9 @@ int inicializacion(){                                       //funcion que inicia
 
 void *entrad_allegro(){             //thread que recibe por comando el movimiento deseado por el jugador
     enum MYKEYS {
-    KEY_W, KEY_S, KEY_A, KEY_D,ESC,ENTER,ESPACIO //enumero mis letras oa q quede mas fachero el arrgelo
+    KEY_W, KEY_S, KEY_A, KEY_D,ESC,ENTER,KEY_R //enumero mis letras oa q quede mas fachero el arrgelo
     };
-    int key_pressed[5] = {FALSE, FALSE, FALSE, FALSE,FALSE}; //Estado de teclas, true cuando esta apretada
+    int key_pressed[6] = {FALSE, FALSE, FALSE, FALSE,FALSE,FALSE}; //Estado de teclas, true cuando esta apretada
     while(1){
         
         ALLEGRO_EVENT ev;
@@ -307,11 +307,16 @@ void *entrad_allegro(){             //thread que recibe por comando el movimient
                             tecla=RIGHT;
                             right_or_left = RIGHT;
                             break;
+                        case ALLEGRO_KEY_R:
+                            key_pressed[KEY_R] = TRUE;
+                            tecla=REINICIAR;
+                            break;
                             
                         case ALLEGRO_KEY_ESCAPE:
                             key_pressed[ESC]=TRUE;
                             tecla=PAUSA;
                             break;
+                            
                     }
                 }
                 else if (ev.type == ALLEGRO_EVENT_KEY_UP) {
@@ -334,6 +339,9 @@ void *entrad_allegro(){             //thread que recibe por comando el movimient
                         case ALLEGRO_KEY_D:
                         case ALLEGRO_KEY_RIGHT:
                             key_pressed[KEY_D] = FALSE;
+                            break;
+                        case ALLEGRO_KEY_R:
+                            key_pressed[KEY_R] =FALSE;
                             break;
 
                         case ALLEGRO_KEY_ESCAPE:
@@ -554,7 +562,10 @@ void menu_allegro(void){            //funcion que imprime el menu de pausa, no r
             al_draw_text(font_pausa, al_map_rgb(0, 0, 0), FONT_NIVEL_X, FONT_NIVEL_Y, ALLEGRO_ALIGN_CENTER, "saliendo del juego...");
             al_flip_display();
             al_rest(1.5);
-        }    
+        }
+        else if(tecla==REINICIAR){
+            end=0;
+        }
     }
 }
 
