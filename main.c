@@ -206,7 +206,7 @@ int main() {
 #endif
                     movimiento(*niveles[i],boton);                              //para ver movimiento
 #ifdef PC           
-                    coin_sound();
+                    coin_sound();                                               //reproduzco el sonido de la moneda
                     draw_background();                                          //imprimo para que se vea el puntaje nuevo
                     print_map_allegro(*niveles[i]);                             //imprime mapa
 #endif
