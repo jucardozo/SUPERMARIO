@@ -17,6 +17,8 @@ ALLEGRO_EVENT_QUEUE *event_queue = NULL;        //Cola de eventos*/
 extern int tecla;           //variables que necesito de main.c para algunas funciones
 extern int pos[3];
 extern int vida;
+extern int puntaje;
+extern int nivel;
 extern int fin;
 extern int stop;
 
@@ -492,7 +494,7 @@ void print_map_allegro(int arr [ALTURA][LARGO]){            //funcion que carga 
   
  }
 
-void draw_background (int puntaje, int nivel){              //funcion que carga el detras de escena del mario, es decir el mar con mas informacion, recibe el puntaje y el nivel y no devuelve nada
+void draw_background (void){              //funcion que carga el detras de escena del mario, es decir el mar con mas informacion, no recibe nada y no devuelve nada
     
     al_draw_scaled_bitmap(mar,0, 0, al_get_bitmap_width(mar), al_get_bitmap_height(mar),0, 0, LARGO_DISPLAY, ANCHO_DISPLAY,0);      //CARGO BACKGROUND (el mar)
     al_draw_text(font, al_map_rgb(255, 255, 255), PUNTAJE_X , VISTA_Y , ALLEGRO_ALIGN_CENTER, "PUNTAJE:");                  
@@ -522,7 +524,7 @@ void draw_background (int puntaje, int nivel){              //funcion que carga 
     }
 }
 
-int menu_allegro(int punt, int niv,int vid){            //funcion que imprime el menu de pausa, recibe el puntaje, el nivel y la vida y devuelve un 0
+void menu_allegro(void){            //funcion que imprime el menu de pausa, no recibe nada y no devuelve nada
     
     al_draw_bitmap(men_pausa,MENU_X,MENU_Y,0);              //imprime una parte del lobby
     al_draw_text(font_pausa, al_map_rgb(255, 255, 255), FONT_NIVEL_X,FONT_NIVEL_Y+20, ALLEGRO_ALIGN_CENTER, "PRESIONE ESC PARA CONTINUAR");
@@ -534,7 +536,7 @@ int menu_allegro(int punt, int niv,int vid){            //funcion que imprime el
             stop=0;
             end=0;
             tecla=0;
-             draw_background(punt,vid);
+             draw_background();
         }  
         else if( tecla==SALIR){             //si apreto la cruz roja entonces imprime saliendo, espera y sale del juego
             end=0;
@@ -542,16 +544,13 @@ int menu_allegro(int punt, int niv,int vid){            //funcion que imprime el
             al_draw_text(font_pausa, al_map_rgb(0, 0, 0), FONT_NIVEL_X, FONT_NIVEL_Y, ALLEGRO_ALIGN_CENTER, "saliendo del juego...");
             al_flip_display();
             al_rest(1.5);
-        }
-            
+        }    
     }
-   
-    return 0;
 }
 
 
 
-void print_lvl (int nivel){             //funcion que imprime en que nivel estas antes de cada nivel, recibe el nivel y no devuelve nada
+void print_lvl (void){             //funcion que imprime en que nivel estas antes de cada nivel, no recibe nada y no devuelve nada
     al_rest(0.5);
     al_draw_textf(font_nivel, al_map_rgb(0, 0, 0), FONT_NIVEL_X, FONT_NIVEL_Y , ALLEGRO_ALIGN_CENTER, "NIVEL %d",nivel);        //imprime que NIVEL y cual es, en blanco con efecto 3D
     al_draw_textf(font_nivel, al_map_rgb(255, 255, 255), FONT_NIVEL_X+5 , FONT_NIVEL_Y-5 , ALLEGRO_ALIGN_CENTER, "NIVEL %d",nivel);
@@ -577,7 +576,19 @@ void print_vida (void){                     //funcion que me imprime las vidas q
     }
 }
 
-void print_gameover(int puntaje){           //funcion que imprime GAME OVER y SCORE cuando perdes, recibe el puntaje y no devuelve nada
+void print_win(void){           //funcion que imprime en pantalla cuando el jugadir gana, no recibe nada y no devuelve nada
+    al_clear_to_color(al_map_rgb(0, 0, 0));                                                                         //imprime pantalla en negro
+    al_flip_display();
+    al_draw_textf(font_nivel, al_map_rgb(255, 255, 255), SCORE_X, SCORE_Y, ALLEGRO_ALIGN_CENTER, "SCORE  %d",puntaje);      //impreme el score que hiciste GAME OVER en 3D
+    al_draw_text(font_nivel, al_map_rgb(0, 0, 255), FONT_NIVEL_X-5, FONT_NIVEL_Y+5 , ALLEGRO_ALIGN_CENTER, "YOU WIN");
+    al_draw_text(font_nivel, al_map_rgb(255, 0, 0), FONT_NIVEL_X, FONT_NIVEL_Y , ALLEGRO_ALIGN_CENTER, "YOU WIN");
+    al_draw_text(font_nivel, al_map_rgb(255, 255, 255), FONT_NIVEL_X+5 , FONT_NIVEL_Y-5 , ALLEGRO_ALIGN_CENTER, "YOU WIN");
+    al_draw_textf(font_nivel, al_map_rgb(255, 255, 255), VIDAS_X, VIDAS_Y, ALLEGRO_ALIGN_CENTER, "VIDAS %d",vida);
+    al_flip_display();
+    al_rest(2.5); 
+}
+
+void print_gameover(void){           //funcion que imprime GAME OVER y SCORE cuando perdes, no recibe nada y no devuelve nada
     al_clear_to_color(al_map_rgb(0, 0, 0));                                                                         //imprime pantalla en negro
     al_flip_display();
     al_draw_textf(font_nivel, al_map_rgb(255, 255, 255), SCORE_X, SCORE_Y, ALLEGRO_ALIGN_CENTER, "SCORE  %d",puntaje);      //impreme el score que hiciste GAME OVER en 3D

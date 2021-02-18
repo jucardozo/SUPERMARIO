@@ -1,4 +1,4 @@
-     /*
+   /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -40,7 +40,7 @@
 
 
 /*Globales*/
-int nivel=3;
+int nivel=1;
 int stop;                                                                       //variable que uso para pausar el juego
 int fin=1;
 int puntaje=0;                                                                  /*se lleva el conteo del puntaje*/
@@ -100,9 +100,9 @@ int main() {
                     pos[1]=0;
                     pos[2]=0;
 #ifdef PC
-                    draw_background (puntaje,nivel);                            //imprimimos el detras de escena
+                    draw_background ();                                         //imprimimos el detras de escena
                     al_flip_display();                
-                    print_lvl (nivel);                                          //imprimimos la presentacion del nivel
+                    print_lvl ();                                               //imprimimos la presentacion del nivel
                     print_map_allegro(*niveles[0]);                             //arranca a imprimirse el mapa
 #endif   
 #ifdef RASPI
@@ -116,9 +116,9 @@ int main() {
                     pos[1]=0;
                     pos[2]=0;
 #ifdef PC
-                    draw_background (puntaje,nivel);                            //imprimimos el detras de escena
+                    draw_background ();                                         //imprimimos el detras de escena
                     al_flip_display();  
-                    print_lvl (nivel);                                          //imprimimos la presentacion del nivel
+                    print_lvl ();                                               //imprimimos la presentacion del nivel
                     print_map_allegro(*niveles[1]);                             //arranca a imprimirse el mapa
 #endif
 #ifdef RASPI
@@ -133,9 +133,9 @@ int main() {
                     pos[1]=0;
                     pos[2]=0;
 #ifdef PC
-                    draw_background (puntaje,nivel);                            //imprimimos el detras de escena
+                    draw_background ();                                         //imprimimos el detras de escena
                     al_flip_display(); 
-                    print_lvl (nivel);                                          //imprimimos la presentacion del nivel
+                    print_lvl ();                                               //imprimimos la presentacion del nivel
                     print_map_allegro(*niveles[2]);                             //arranca a imprimirse el mapa
 #endif
 #ifdef RASPI
@@ -145,6 +145,16 @@ int main() {
                     boton=0;i=2;fin=1;break;                                    //se ponen las variables en sus correspondientes valores
             default:
                 fin=0;vida=0;break;                                             //se ponen las variables en sus correspondientes valores si nivel no es 1,2 o 3
+        }
+        if(nivel==4)                                                            //si paso el nivel 3 entonces gano, imprime en pantalla
+        {
+#ifdef PC
+                    print_win();                                                //arranca a imprimirse el mapa
+#endif
+#ifdef RASPI
+                    printf("SCORE: %d\n",puntaje);                              //imprime que gano
+                    printf("YOU WIN\n");
+#endif
         }
         
         while(fin){
@@ -159,7 +169,7 @@ int main() {
                     menu();                                                     //imprimimos el menu de pausa
 #endif
 #ifdef PC
-                    menu_allegro(puntaje,nivel,vida);                           //imprimimos el menu de pausa
+                    menu_allegro();                                             //imprimimos el menu de pausa
 #endif
 
                     if(tecla==SALIR){                                           //salida provocada por el menu
@@ -190,7 +200,7 @@ int main() {
 #endif
                     movimiento(*niveles[i],boton);                              //para ver movimiento
 #ifdef PC            
-                    draw_background(puntaje,nivel);                             //imprimo para que se vea el puntaje nuevo
+                    draw_background();                                          //imprimo para que se vea el puntaje nuevo
                     print_map_allegro(*niveles[i]);                             //imprime mapa
 #endif
 #ifdef RASPI
@@ -208,7 +218,7 @@ int main() {
                     nivel+=1;                                                   //cambia de nivel y setea variables
                     fin=0;
 #ifdef PC            
-                    draw_background(puntaje,nivel);                             //imprimo detras de escena para ver lo de arriba
+                    draw_background();                                          //imprimo detras de escena para ver lo de arriba
                     al_flip_display();
 #endif
                 }
@@ -216,7 +226,7 @@ int main() {
                     vida-=1;                                                    /*si es 3 es porque mario perdio una vida*/
                     if(vida<0){
 #ifdef PC
-                        print_gameover(puntaje);                                //si perdio entonces imprime gameover
+                        print_gameover();                                       //si perdio entonces imprime gameover
 #endif
 #ifdef RASPI
                         printf("PUNTAJE: %d\n",puntaje);                        //si perdio entonces imprime gameover
