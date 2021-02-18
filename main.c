@@ -40,7 +40,7 @@
 
 
 /*Globales*/
-int nivel=1;
+int nivel=3;
 int stop;                                                                       //variable que uso para pausar el juego
 int fin=1;
 int puntaje=0;                                                                  /*se lleva el conteo del puntaje*/
@@ -107,7 +107,8 @@ int main() {
 #endif   
 #ifdef RASPI
                     printf("**************NIVEL 1*****************\n");
-                    printmat(*niveles[0]);                                      //arranca a imprimirse el mapa
+                    printmat(*niveles[0]);  //imprime el nivel
+		    print_mat_rspi(*niveles[0]);                                //se imprime mapa en la raspi
 #endif
                     i=0;fin=1; break;                                           //se ponen las variables en sus correspondientes valores
             case 2 :                                                            //NIVEL 2
@@ -123,7 +124,8 @@ int main() {
 #endif
 #ifdef RASPI
                   printf("**************NIVEL 2*****************\n");
-                  printmat(*niveles[1]);                                        //arranca a imprimirse el mapa
+                  printmat(*niveles[1]);  
+		  print_mat_rspi(*niveles[1]);                                  //se imprime mapa en la raspi
 #endif
                     
                     i=1;fin=1;boton=0;break;                                    //se ponen las variables en sus correspondientes valores
@@ -140,7 +142,8 @@ int main() {
 #endif
 #ifdef RASPI
                     printf("**************NIVEL 3*****************\n");
-                    printmat(*niveles[2]);                                      //arranca a imprimirse el mapa
+                    printmat(*niveles[2]);  //
+		    print_mat_rspi(*niveles[2]);                                //se imprime mapa en la raspi
 #endif
                     boton=0;i=2;fin=1;break;                                    //se ponen las variables en sus correspondientes valores
             default:
@@ -189,7 +192,8 @@ int main() {
                     print_map_allegro(*niveles[i]);
 #endif
 #ifdef RASPI
-                    printmat(*niveles[i]);                                      //imprime mapa
+                    printmat(*niveles[i]);
+		    print_mat_rspi(*niveles[i]);                                //imprime mapa
 #endif
                     tecla=0;                                                    //setea tecla
                 }
@@ -197,15 +201,15 @@ int main() {
                     puntaje+=10;
 #ifdef RASPI
                     printf("PUNTAJE:%d\n",puntaje);                             //imprimo el puntaje si agarro moneda
+                    printmat(*niveles[i]);   
+                    print_mat_rspi(*niveles[i]);                                //impreime mapa
 #endif
                     movimiento(*niveles[i],boton);                              //para ver movimiento
 #ifdef PC            
                     draw_background();                                          //imprimo para que se vea el puntaje nuevo
                     print_map_allegro(*niveles[i]);                             //imprime mapa
 #endif
-#ifdef RASPI
-                 printmat(*niveles[i]);                                         //imprime mapa
-#endif
+
                     tecla=0;                                                    //setea tecla
                 }
                 else if(val==4){                                                //paso de nivel
@@ -248,14 +252,17 @@ int main() {
                     }
                 }
              
-            }
-#ifdef PC           
+            }          
             else{                                                               //si no se detecto niguna entrada por el teclado,acrualiza pantalla       
-
+#ifdef PC 
                 print_map_allegro(*niveles[i]);                                 //imprimiendo
                 print_vida();
+#endif                 
+#ifdef RASPI
+                print_mat_rspi(*niveles[i]);
+#endif                
             }
- #endif         
+        
         }
         
     }
