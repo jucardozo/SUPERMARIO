@@ -43,6 +43,7 @@
 /*Globales*/
 int nivel=1;
 int stop;                                                                       //variable que uso para pausar el juego
+int reinicio=0;
 int fin=1;
 int puntaje=0;                                                                  /*se lleva el conteo del puntaje*/
 int vida=3;                                                                     /*se lleva el conteo de las vidas*/
@@ -113,7 +114,7 @@ int main() {
                     printmat(*niveles[0]);  //imprime el nivel
 		    print_mat_rspi(*niveles[0]);                                //se imprime mapa en la raspi
 #endif
-                    i=0;fin=1; break;                                           //se ponen las variables en sus correspondientes valores
+                    i=0;fin=1;reinicio=0; break;                                           //se ponen las variables en sus correspondientes valores
             case 2 :                                                            //NIVEL 2
                     clear_map(*niveles[1]);   
                     pos[0]=0;
@@ -133,7 +134,7 @@ int main() {
 		  print_mat_rspi(*niveles[1]);                                  //se imprime mapa en la raspi
 #endif
                     
-                    i=1;fin=1;boton=0;break;                                    //se ponen las variables en sus correspondientes valores
+                    i=1;fin=1;boton=0;reinicio=0;break;                                    //se ponen las variables en sus correspondientes valores
             case 3 :                                                            //NIVEL 3
                     clear_map(*niveles[2]);                
                     pos[0]=0;
@@ -152,7 +153,7 @@ int main() {
                     printmat(*niveles[2]);  //
 		    print_mat_rspi(*niveles[2]);                                //se imprime mapa en la raspi
 #endif
-                    boton=0;i=2;fin=1;break;                                    //se ponen las variables en sus correspondientes valores
+                    boton=0;i=2;fin=1;reinicio=0;break;                                    //se ponen las variables en sus correspondientes valores
             default:
                 fin=0;vida=0;break;                                             //se ponen las variables en sus correspondientes valores si nivel no es 1,2 o 3
         }
@@ -188,6 +189,8 @@ int main() {
                     else if(tecla==REINICIAR){
                         fin=0;
                         stop=0;
+                        reinicio=1;
+                        //sleep(1);
                     }
                 }
                 else if (boton==SALIR){                                         //salida provocada por display

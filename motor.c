@@ -9,6 +9,7 @@
 
 
 extern int tecla;                           //variables que necesito de main.c para algunas funciones
+extern int reinicio;
 extern int pos[3];
 extern int stop;
 extern int(*niveles[2])[ALTURA][LARGO];
@@ -221,7 +222,9 @@ void*  caida ( ){                           //thread para la caida de mario , im
 
 void * enemigo_pez(){               //thread que controla los movimientos del pez que va mas rapido en el mapa
     while(1){
+        printf("reinicie papa\n");
         int pez = 1;                //variable que uso para el while
+        int reboot=0;
 
         int *pezes [MAX_ENEM];             //creo arreglo de punteros para guardar las posiciones de los peces  
         int * dir_niveles [3] = {&lvl_1[0][0],&lvl_2[0][0],&lvl_3[0][0]};       //arreglo depunteros que contiene la direccion del primer elemento de la matriz de cada nivel
@@ -270,8 +273,15 @@ void * enemigo_pez(){               //thread que controla los movimientos del pe
             hasta=18;
         }
 
-        while ((pez) && (nivel_var==nivel)){                //hasta que no hayan peZes o hasta que cambie de nivel      
+        while (  (pez)  && (nivel_var==nivel)){                //hasta que no hayan peZes o hasta que cambie de nivel      
+            printf("reinicio:%d,pez:%d, nivel_var:%d\n",reinicio,pez,nivel_var);
             while (stop){               //para la pausa
+
+            }
+            if(reinicio==1){
+                printf("pongo pez en cero\n");
+                pez=0;
+                reboot=1;
             }
 
             if(cant_pez == 0){
@@ -352,10 +362,11 @@ void * enemigo_pez(){               //thread que controla los movimientos del pe
             }
 
         }  
-        while(nivel_var == nivel){          //esto esta si ya no quedaron peces, el thread vuelve a arrancar cuando cambia de nivel
-            
+        if(reboot==0){
+            while(nivel_var == nivel){          //esto esta si ya no quedaron peces, el thread vuelve a arrancar cuando cambia de nivel
+                printf("estor afuera\n");
+            }
         }
-
     }
 }
 
@@ -364,7 +375,7 @@ void * enemigo_pez(){               //thread que controla los movimientos del pe
 void * enemigo_pes(){           //thread que controla los movimientos del pes que va mas lento en el mapa
     while(1){
         int pes = 1;                //variable que uso para el while
-
+        int reboot=0;
         int *peses [MAX_ENEM];             //creo arreglo de punteros para guardar las posiciones de los peces  
         int * dir_niveles [3] = {&lvl_1[0][0],&lvl_2[0][0],&lvl_3[0][0]};       //arreglo depunteros que contiene la direccion del primer elemento de la matriz de cada nivel
 
@@ -414,6 +425,10 @@ void * enemigo_pes(){           //thread que controla los movimientos del pes qu
 
         while ((pes) && (nivel_var==nivel)){                //hasta que no hayan peSes o hasta que cambie de nivel 
             while (stop){               //para la pausa
+            }
+            if(reinicio==1){
+                pes=0;
+                reboot=1;
             }
 
             if(cant_pes == 0){
@@ -493,10 +508,11 @@ void * enemigo_pes(){           //thread que controla los movimientos del pes qu
             }
 
         }  
-        while(nivel_var == nivel){
-            
-        }
+        if(reboot==0){
+            while(nivel_var == nivel){
 
+            }
+        }
     }
 }
 
