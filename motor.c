@@ -651,3 +651,14 @@ void * enemigo_pulpo(){                 //thread que controla los movimientos de
         }		
     }	
 }
+
+void clear_map(int arr[ALTURA][LARGO]){                    //funcion que recibe la amtriz nivel y la llena de ceros 
+    int i , j ;
+    for(i=0;i<ALTURA;i++){
+        for(j=0;j<LARGO;j++){
+            arr[i][j]=0;
+        }
+    }
+}
+
+

@@ -4,6 +4,10 @@
  * and open the template in the editor.
  */
 #include "rspi.h"
+#include "disdrv.h"
+#include "joydrv.h"
+#include "levels.h"
+
 
 extern int tecla;
 extern int pos[3];
@@ -11,51 +15,45 @@ extern int vida;
 extern int fin;
 extern int stop;
 
+extern int lvl_1[ALTURA][LARGO];
+extern int lvl_2[ALTURA][LARGO];
+extern int lvl_3[ALTURA][LARGO];
+
 int inicializacion(void){
-        joy_init();                  //se inicializa el joystick
-        init_sound();                //se inicializa el sonido
-        if(player_status==READY){   //si el audio esta listo para usarse , lo reproduce
-            set_file_to_play("musica.wav"); //controlar , posiblemente se lo este mandando mal
-            play_sound();
-        }
-        else{
-            return -1;
-        }
-        
+        joy_init();                 //se inicializa el joystick
+	disp_init();	
+	disp_clear();
+	return 0;
 }
 
 
 
-void entrada_rspi (){
+void entrada_rspi (void){
     jcoord_t mycoord;            //se crea una variable tipo jcoord, q contendra las coordenadas de x e y
-    jswitch myswitch;            //almacena el valor del pulsador, se lo utilizara para la pausa del juego
-    int difx=0,dify=0;
+    jswitch_t myswitch;            //almacena el valor del pulsador, se lo utilizara para la pausa del juego
+    printf("\n");
+    printf("hola, entre a la entrad de raspi\n");
+    printf("\n");
     while(1){
         joy_update();           //actualiza la posicion del joystick, sin realizar ningun movimiento efectivo
         mycoord=joy_get_coord();    //obtengo las coordenadas para luego compararlas
-        myswitch=jot_get_switch();  //guarda el estado del pulsador 
-        difx=(mycoord.x-pos[1]);    //se saca la diferencia entre la posicion real de mario , con la actualizacion del joystick
-        dify=(mycoord.y-pos[0]);
-        switch(difx){               //evalua movimientos en x o en columnas
-            case 1:                 //si la diferencia es 1 entonces se esta moviendo a la derecha
-                tecla=right;
-                break;
-            case -1:
-                tecla=left;
-                break;
-            default:               //si no encontro diferencia , entonces no se movio en x
-                break;
-        }
-        switch(dify){              //analiza movimientos en y o en filas
-            case 1:
-                tecla=down;
-                break;
-            case -1:
-                tecla=up;
-                break;
-            default:
-                break;                                        
-        }        
+        myswitch=joy_get_switch();  //guarda el estado del pulsador 
+        if(mycoord.x > THRESHOLD)
+	{
+		tecla = right;
+	}
+	if(mycoord.x < -THRESHOLD)
+	{
+		tecla = left;
+	}
+	if(mycoord.y > THRESHOLD)
+	{
+		tecla = up;
+	}
+	if(mycoord.y < -THRESHOLD)
+	{
+		tecla = down;
+	}
         if(myswitch==J_PRESS){       //se pulso el pulsador del joystick
             tecla=pausa;
         }
@@ -63,3 +61,65 @@ void entrada_rspi (){
     }
 }
 
+void print_mat_rspi(int arr[ALTURA][LARGO]){
+    dcoord_t mypoint;
+
+    if(((16+pos[2])-pos[1])<=8){        //se lee la columna en donde esta mario y se mueve le mapa si esta en la mitad
+        pos[2]+=4;                      //la cantidad de este movimineto se guarda en el tercer elemento del arreglo, se elije por default que se mueva de a 4
+    }
+    if(pos[2]<HASTA_LED){
+        for (int i=0;i<16;i++){
+            for(int p=pos[2]; p<(16+pos[2]);p++){
+		switch(arr[i][p]){
+		    case PRECIPICIO:
+                    case AGUA:
+			mypoint.x=p-pos[2];
+			mypoint.y=i;
+			disp_write(mypoint,D_OFF);
+			break;
+                    case BLOQUE:
+                    case ALGA:
+                    case FINAL:
+                    //case MONEDA:
+                    case PEZ:
+                    case PES:
+                    case PULPO:
+                    case MARIO:
+			mypoint.x=p-pos[2];
+			mypoint.y=i;
+			disp_write(mypoint,D_ON);
+			break;			
+		}                
+            }
+        }
+    disp_update();
+    }
+    else{
+        for (int i=0;i<16;i++){
+            for(int p=HASTA_LED; p<70;p++){
+               switch(arr[i][p]){
+		    case PRECIPICIO:
+                    case AGUA:
+			mypoint.x=p-HASTA_LED;
+			mypoint.y=i;
+			disp_write(mypoint,D_OFF);
+			break;
+                    case BLOQUE:
+                    case ALGA:
+                    case FINAL:
+                    //case MONEDA:
+                    case PEZ:
+                    case PES:
+                    case PULPO:
+                    case MARIO:
+			mypoint.x=p-HASTA_LED;
+			mypoint.y=i;
+			disp_write(mypoint,D_ON);
+			break;			
+		}  
+            }
+            
+        } 
+    disp_update();
+    }
+}

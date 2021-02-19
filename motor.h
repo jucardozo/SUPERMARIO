@@ -20,6 +20,7 @@ extern "C" {
 void bienvenida (void);                                     //funcion que le da la bievenida al usuario por display, no recibe nada y no devuellve nada
 void movimiento(int arr[ALTURA][LARGO],int boton);          //funcion que recibe la matriz nivel, y un arreglo en donde se va a guarda la posicion de mario y no devuelve nada
 void ctrl_posicion(int arr[ALTURA][LARGO],int pos[3]);      //funcion que recibe la matriz nivel, y una matriz en donde se va a guarda la posicion de mario y no devuelve nada
+void clear_map(int arr[ALTURA][LARGO]);                    //funcion que recibe la amtriz nivel y la llena de ceros                               //
 void printmat(int arr[ALTURA][LARGO]);                      //funcion que imprime la matriz nivel dependiendo de donde este el mario de 16x16, recibe una matriz (nivel) y no devuelve nada
 int reglas (int arr[ALTURA][LARGO],int boton);              //funcion que se le pasa una matriz (nivel) en el que se esta jugando, y el comando accionado (boton) y no devuelve nada
 int menu(void);                                             //funcion que imprime el menu de pausa, no recibe nada y devuelve un 0

@@ -96,10 +96,12 @@ int main() {
     while(vida>0){
         switch(nivel){                                                          //habilita el control, automatico, de cada enemigo en cada nivel//
             case 1 :                                                            //NIVEL 1
+                    clear_map(*niveles[0]);                
                     pos[0]=0;
                     pos[1]=0;
                     pos[2]=0;                   
                     creacionmap(nivel);                                         //se crea el NIVEL 1
+
 #ifdef PC
                     draw_background ();                                         //imprimimos el detras de escena
                     al_flip_display();                
@@ -113,10 +115,12 @@ int main() {
 #endif
                     i=0;fin=1; break;                                           //se ponen las variables en sus correspondientes valores
             case 2 :                                                            //NIVEL 2
-                    creacionmap(nivel);                                         //se crea el NIVEL 2
+                    clear_map(*niveles[1]);   
                     pos[0]=0;
                     pos[1]=0;
                     pos[2]=0;
+                    creacionmap(nivel);                                         //se crea el NIVEL 2
+
 #ifdef PC
                     draw_background ();                                         //imprimimos el detras de escena
                     al_flip_display();  
@@ -131,10 +135,12 @@ int main() {
                     
                     i=1;fin=1;boton=0;break;                                    //se ponen las variables en sus correspondientes valores
             case 3 :                                                            //NIVEL 3
-                    creacionmap(nivel);                                         //se crea el NIVEL 3
+                    clear_map(*niveles[2]);                
                     pos[0]=0;
                     pos[1]=0;
-                    pos[2]=0;
+                    pos[2]=0;                
+                    creacionmap(nivel);                                         //se crea el NIVEL 3
+
 #ifdef PC
                     draw_background ();                                         //imprimimos el detras de escena
                     al_flip_display(); 
@@ -181,6 +187,7 @@ int main() {
                     }
                     else if(tecla==REINICIAR){
                         fin=0;
+                        stop=0;
                     }
                 }
                 else if (boton==SALIR){                                         //salida provocada por display
