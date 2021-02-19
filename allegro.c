@@ -58,13 +58,6 @@ int inicializacion(){                                       //funcion que inicia
         al_destroy_display(display);
         return -1;
     }
-    else if (!(press_start = al_load_bitmap("press_start.jpg"))) {           //se carga imagen de press_start
-        fprintf(stderr, "Unable to load press_start\n");
-        al_uninstall_system();
-        al_shutdown_image_addon();
-        al_destroy_display(display);
-        return -1;
-    }
     else if (!(mar = al_load_bitmap("mar.png"))) {              // se carga en un bitmap la imagen que usaremos de base
         fprintf(stderr, "Unable to load mar\n");
         al_uninstall_system();
@@ -171,6 +164,7 @@ int inicializacion(){                                       //funcion que inicia
     font = al_load_ttf_font("letritas.ttf", 36, 0); //FUENTE PARA LA INFO DE ARRIBA 
     font_nivel = al_load_ttf_font("letritas.ttf", 100, 0); //FUENTE PARA EL NIVEL Y PARA EL GAMEOVER
     font_pausa = al_load_ttf_font("letritas.ttf", 36, 0); //FUENTE PARA LA PAUSA
+    font_press_start = al_load_ttf_font("letritas.ttf", 60, 0); //FUENTE PARA EL MENU DE ENTRADA
     
     if (!font) {
         fprintf(stderr, "Could not load 'letritas.ttf'.\n");             //se carga la fuente font
@@ -182,6 +176,10 @@ int inicializacion(){                                       //funcion que inicia
     }
     if (!font_pausa) {
         fprintf(stderr, "Could not load 'letritas.ttf'.\n");             //se carga la fuente font_pausa
+        return -1;
+    }
+    if (!font_press_start) {
+        fprintf(stderr, "Could not load 'letritas.ttf'.\n");             //se carga la fuente font_press_start
         return -1;
     }
     
@@ -385,11 +383,12 @@ int bienvenida_allegro(void){                   //funcion que imprime la bienven
                 destroy_allegro();                                                                                                                                //
                 return -1;                                                                                                                                                //
             }                                                                                                                                                            //
-            else if ((ev0.type == ALLEGRO_EVENT_KEY_DOWN) && (ev0.keyboard.keycode == ALLEGRO_KEY_ENTER)|| (ev0.keyboard.keycode == ALLEGRO_KEY_SPACE)){              //sino tranqui, salgo del while sin problema     //
+            else if ((ev0.type == ALLEGRO_EVENT_KEY_DOWN) && (ev0.keyboard.keycode == ALLEGRO_KEY_ENTER)){              //sino tranqui, salgo del while sin problema     //
                 mientras = 0;   
             }
         }    
-        al_draw_bitmap(press_start,100,340,0);          //IMPRIMO PRESS START
+        al_draw_text(font_press_start, al_map_rgb(0, 0, 0), FONT_START_X , FONT_START_Y , ALLEGRO_ALIGN_CENTER, "PRESS ENTER");           //IMPRIMO PRESS START
+        al_draw_text(font_press_start, al_map_rgb(255, 255, 255), FONT_START_X+3 , FONT_START_Y-3 , ALLEGRO_ALIGN_CENTER, "PRESS ENTER"); 
         al_flip_display();
         al_rest(1.0);
         al_draw_scaled_bitmap(lobby,0, 0, al_get_bitmap_width(lobby), al_get_bitmap_height(lobby),0, 0, LARGO_DISPLAY, ANCHO_DISPLAY,0);        //HAGO TITILARLO
@@ -547,6 +546,7 @@ void menu_allegro(void){            //funcion que imprime el menu de pausa, no r
     al_draw_bitmap(men_pausa,MENU_X,MENU_Y,0);              //imprime una parte del lobby
     al_draw_text(font_pausa, al_map_rgb(255, 255, 255), FONT_NIVEL_X,FONT_NIVEL_Y+20, ALLEGRO_ALIGN_CENTER, "PRESIONE ESC PARA CONTINUAR");
     al_draw_text(font_pausa, al_map_rgb(255, 255, 255), FONT_NIVEL_X, FONT_NIVEL_Y+85, ALLEGRO_ALIGN_CENTER, "APRIETE LA X PARA CERRAR EL JUEGO");
+    al_draw_text(font_pausa, al_map_rgb(255, 255, 255), FONT_NIVEL_X, FONT_NIVEL_Y+150, ALLEGRO_ALIGN_CENTER, "APRIETE LA R PARA REINICIAR EL NIVEL");
     al_flip_display();      //imprime PRESIONE ESC PARA CONTINUAR y APRIETE LA X PARA CERRAR EL JUEGO en el medio de la pantalla
     int end=1;
     while(end){
@@ -630,7 +630,6 @@ void destroy_allegro (void){            //funcion que destruye todo allegro, no 
     al_destroy_display(display);                //se libera la memoria dinamica , destruyendo los elemntos usados
     al_destroy_bitmap(nintendo);
     al_destroy_bitmap(lobby);
-    al_destroy_bitmap(press_start);
     al_destroy_bitmap(mar);
     al_destroy_bitmap(agua);
     al_destroy_bitmap(vidas);

@@ -47,7 +47,9 @@ extern "C" {
 #define VIDA_3_X 580.0  
 #define FONT_NIVEL_X 325.0
 #define FONT_NIVEL_Y 250.0
-#define SCORE_X 360.0
+#define FONT_START_X 330.0
+#define FONT_START_Y 340.0
+#define SCORE_X 350.0
 #define SCORE_Y 150.0
 #define VIDAS_X 305.0
 #define VIDAS_Y 350.0
@@ -75,12 +77,12 @@ void * entrad_allegro();                                //thread que recibe por 
 ALLEGRO_FONT *font;
 ALLEGRO_FONT *font_nivel;
 ALLEGRO_FONT *font_pausa;
+ALLEGRO_FONT *font_press_start;
 ALLEGRO_BITMAP *mar;                         //que nos permitiran utilizar ciertas funciones de
 ALLEGRO_BITMAP *agua;                        //allegro.
 ALLEGRO_BITMAP *alga; 
 ALLEGRO_BITMAP *lobby;
 ALLEGRO_BITMAP *nintendo;
-ALLEGRO_BITMAP *press_start;
 ALLEGRO_BITMAP *vidas;
 ALLEGRO_BITMAP *vida_perdida;
 ALLEGRO_BITMAP *bloque;

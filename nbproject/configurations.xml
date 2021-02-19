@@ -26,7 +26,6 @@
       <itemPath>pausa.jpg</itemPath>
       <itemPath>pes.png</itemPath>
       <itemPath>pez.png</itemPath>
-      <itemPath>press_start.jpg</itemPath>
       <itemPath>pulpo.png</itemPath>
       <itemPath>../../Descargas/sonido_moneda.wav</itemPath>
       <itemPath>vida.jpeg</itemPath>
@@ -127,8 +126,6 @@
       </item>
       <item path="pez.png" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="press_start.jpg" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="pulpo.png" ex="false" tool="3" flavor2="0">
       </item>
       <item path="vida.jpeg" ex="false" tool="3" flavor2="0">
@@ -201,8 +198,6 @@
       <item path="pes.png" ex="false" tool="3" flavor2="0">
       </item>
       <item path="pez.png" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="press_start.jpg" ex="false" tool="3" flavor2="0">
       </item>
       <item path="pulpo.png" ex="false" tool="3" flavor2="0">
       </item>
