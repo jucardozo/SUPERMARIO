@@ -190,6 +190,7 @@ int main() {
                         fin=0;
                         stop=0;
                         reinicio=1;
+                        puntaje = 0;
                         //sleep(1);
                     }
                 }
