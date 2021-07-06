@@ -107,6 +107,7 @@ int main() {
                     draw_background ();                                         //imprimimos el detras de escena
                     al_flip_display();                
                     print_lvl ();                                               //imprimimos la presentacion del nivel
+ 
                     print_map_allegro(*niveles[0]);                             //arranca a imprimirse el mapa
 #endif   
 #ifdef RASPI
@@ -191,6 +192,7 @@ int main() {
                         stop=0;
                         reinicio=1;
                         puntaje = 0;
+                        vida=3;
                         //sleep(1);
                     }
                 }
