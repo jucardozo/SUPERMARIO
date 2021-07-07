@@ -12,9 +12,20 @@ extern "C" {
 #endif
     
 #include "levels.h"
-#include "motor.h"
+#ifdef PC
 #include "allegro.h" 
-    
+#endif
+
+/*DEFINES*/
+#define UP 100
+#define RIGHT 101
+#define LEFT 102
+#define DOWN 103
+#define PAUSA 104
+#define SALIR 105 
+#define TRUE 1
+#define FALSE 0
+#define REINICIAR 106
     
 /*PROTOTIPOS*/
 void bienvenida (void);                                     //funcion que le da la bievenida al usuario por display, no recibe nada y no devuellve nada
@@ -23,7 +34,7 @@ void ctrl_posicion(int arr[ALTURA][LARGO],int pos[3]);      //funcion que recibe
 void clear_map(int arr[ALTURA][LARGO]);                    //funcion que recibe la amtriz nivel y la llena de ceros                               //
 void printmat(int arr[ALTURA][LARGO]);                      //funcion que imprime la matriz nivel dependiendo de donde este el mario de 16x16, recibe una matriz (nivel) y no devuelve nada
 int reglas (int arr[ALTURA][LARGO],int boton);              //funcion que se le pasa una matriz (nivel) en el que se esta jugando, y el comando accionado (boton) y no devuelve nada
-int menu(void);                                             //funcion que imprime el menu de pausa, no recibe nada y devuelve un 0
+void menu(void);                                             //funcion que imprime el menu de pausa, no recibe nada y devuelve un 0
 
 /*THREADS*/
 void * caida ();                                            //thread para la caida de mario , impuesta por la gravedad                                            

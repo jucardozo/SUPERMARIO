@@ -107,7 +107,6 @@ int main() {
                     draw_background ();                                         //imprimimos el detras de escena
                     al_flip_display();                
                     print_lvl ();                                               //imprimimos la presentacion del nivel
- 
                     print_map_allegro(*niveles[0]);                             //arranca a imprimirse el mapa
 #endif   
 #ifdef RASPI
@@ -156,12 +155,13 @@ int main() {
 #endif
                     boton=0;i=2;fin=1;reinicio=0;break;                                    //se ponen las variables en sus correspondientes valores
             default:
-                fin=0;vida=0;break;                                             //se ponen las variables en sus correspondientes valores si nivel no es 1,2 o 3
+                fin=0;break;                                             //se ponen las variables en sus correspondientes valores si nivel no es 1,2 o 3
         }
         if(nivel==4)                                                            //si paso el nivel 3 entonces gano, imprime en pantalla
         {
 #ifdef PC
                     print_win();                                                //arranca a imprimirse el mapa
+                    vida=0;
 #endif
 #ifdef RASPI
                     printf("SCORE: %d\n",puntaje);                              //imprime que gano
@@ -178,7 +178,7 @@ int main() {
                     stop=1;
                     tecla=0;
 #ifdef RASPI
-                    menu();                                                     //imprimimos el menu de pausa
+                    menu();                                           //imprimimos el menu de pausa
 #endif
 #ifdef PC
                     menu_allegro();                                             //imprimimos el menu de pausa
@@ -192,7 +192,7 @@ int main() {
                         stop=0;
                         reinicio=1;
                         puntaje = 0;
-                        vida=3;
+			vida = 3;
                         //sleep(1);
                     }
                 }
@@ -250,6 +250,7 @@ int main() {
                         print_gameover();                                       //si perdio entonces imprime gameover
 #endif
 #ifdef RASPI
+			gameover_rspi();
                         printf("PUNTAJE: %d\n",puntaje);                        //si perdio entonces imprime gameover
                         printf("GAME OVER\n");
 #endif 
@@ -261,6 +262,7 @@ int main() {
                     {           
 #ifdef RASPI
                         printf("Perdiste una vida, te quedan: %d\n",vida);      
+			vida_rspi();
 #endif
 #ifdef PC
                         print_vida();
@@ -277,11 +279,11 @@ int main() {
 #endif                 
 #ifdef RASPI
                 print_mat_rspi(*niveles[i]);
+		vida_rspi();
 #endif                
             }
         
         }
-        
     }
     stop=PAUSA;                                                                 //falg para PAUSA
     

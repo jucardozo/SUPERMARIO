@@ -18,17 +18,8 @@ extern "C" {
 #include <allegro5/allegro_font.h> //manejo de fonts
 #include <allegro5/allegro_ttf.h> //Manejo de ttfs
 #include "levels.h"         //solo para incluir defines
+#include "motor.h" 
   
-/*DEFINES*/
-#define UP 100
-#define RIGHT 101
-#define LEFT 102
-#define DOWN 103
-#define PAUSA 104
-#define SALIR 105 
-#define TRUE 1
-#define FALSE 0
-#define REINICIAR 106
 
 /*ALLEGRO*/
 #define FPS    60.0

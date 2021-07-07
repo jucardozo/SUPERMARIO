@@ -97,7 +97,7 @@ void printmat(int arr[ALTURA][LARGO]){          //funcion que imprime la matriz 
     }
     else{
         for (int i=0;i<16;i++){
-            for(int p=56; p<(70);p++){
+            for(int p=54; p<(70);p++){
                 printf("%d",arr[i][p]);
             }
             printf("\n");
@@ -140,7 +140,7 @@ int reglas(int arr[ALTURA][LARGO],int boton){                   //funcion que se
 }
 
 
-int menu(void){                             //funcion que imprime el menu de pausa, no recibe nada y devuelve un 0
+void menu(void){                             //funcion que imprime el menu de pausa, no recibe nada y devuelve un 0
     printf("************MENU(BETA)*************\n");
     printf("PUNTAJE:%d\n",puntaje);
     printf("VIDA:%d\n",vida);
@@ -152,16 +152,14 @@ int menu(void){                             //funcion que imprime el menu de pau
             stop=0;
             fin=0;
             tecla=0;
-             printf("reanudando juego...\n");
+            printf("reanudando juego...\n");
         }  
         else if( tecla==SALIR){
             fin=0;
             printf("saliendo del juego....\n");
         }
             
-    }
-   
-    return 0;
+    }   
 }
 
 
@@ -222,7 +220,7 @@ void*  caida ( ){                           //thread para la caida de mario , im
 
 void * enemigo_pez(){               //thread que controla los movimientos del pez que va mas rapido en el mapa
     while(1){
-        printf("reinicie papa\n");
+
         int pez = 1;                //variable que uso para el while
         int reboot=0;
 
@@ -758,5 +756,4 @@ void clear_map(int arr[ALTURA][LARGO]){                    //funcion que recibe 
         }
     }
 }
-
 
